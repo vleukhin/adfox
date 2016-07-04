@@ -3,18 +3,25 @@
 namespace AdFox\Campaigns;
 
 use AdFox\AdFox;
+use AdFox\Campaigns\Traits\HasRestrictions;
 use AdFox\Campaigns\Traits\HasStatus;
 
 class SuperCampaign extends BaseObject{
 
 	use HasStatus;
+	use HasRestrictions;
 		
 	/**
 	 * Attributes that can be modified
 	 *
 	 * @var array
 	 */
-	protected $attributes = ['id', 'status'];
+	protected $attributes = [
+		'id', 'status',
+		'maxImpressions', 'maxImpressionsPerDay', 'maxImpressionsPerHour',
+		'maxClicks', 'maxClicksPerDay', 'maxClicksPerHour',
+		'maxActiveEvents', 'maxActiveEventsPerDay', 'maxActiveEventsPerHour',
+	];
 
 	/**
 	 * SuperCampaign constructor.
@@ -26,6 +33,9 @@ class SuperCampaign extends BaseObject{
 	{
 		$this->id = $attributes['ID'];
 		$this->status = $attributes['status'];
+		$this->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
+		$this->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
+		$this->setActiveEventsLimits($attributes['maxActiveEvents'], $attributes['maxActiveEventsPerDay'], $attributes['maxActiveEventsPerHour']);
 
 		parent::__construct($adfox);
 	}

@@ -11,7 +11,7 @@ trait HasStatus {
 	 *
 	 * @var int
 	 */
-	protected $status = null;
+	protected $status;
 
 	/**
 	 * Check if object is active.

@@ -59,7 +59,10 @@ abstract class BaseObject {
 
 		foreach ($this->attributes as $property)
 		{
-			$array[$property] = $this->{$property};
+			if (property_exists($this, $property) and !is_null($this->{$property}))
+			{
+				$array[$property] = $this->{$property};
+			}
 		}
 
 		return $array;

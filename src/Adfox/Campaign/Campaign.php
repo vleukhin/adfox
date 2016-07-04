@@ -9,6 +9,7 @@
 namespace AdFox\Campaigns;
 
 use AdFox\AdFox;
+use AdFox\Campaigns\Traits\HasRestrictions;
 use AdFox\Campaigns\Traits\HasStatus;
 use AdFox\Campaigns\Traits\HasLevel;
 
@@ -16,6 +17,7 @@ class Campaign extends BaseObject{
 	
 	use HasStatus;
 	use HasLevel;
+	use HasRestrictions;
 
 	const ROTATION_PRIORY = 0;
 	const ROTATION_PRECENT = 1;
@@ -39,7 +41,12 @@ class Campaign extends BaseObject{
 	 *
 	 * @var array
 	 */
-	protected $attributes = ['id', 'status'];
+	protected $attributes = [
+		'id', 'status', 'level',
+		'maxImpressions', 'maxImpressionsPerDay', 'maxImpressionsPerHour',
+		'maxClicks', 'maxClicksPerDay', 'maxClicksPerHour',
+		'maxActiveEvents', 'maxActiveEventsPerDay', 'maxActiveEventsPerHour',
+	];
 
 	/**
 	 * Campaign constructor.
@@ -52,6 +59,9 @@ class Campaign extends BaseObject{
 		$this->id = $attributes['ID'];
 		$this->status = $attributes['status'];
 		$this->level = $attributes['level'];
+		$this->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
+		$this->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
+		$this->setActiveEventsLimits($attributes['maxActiveEvents'], $attributes['maxActiveEventsPerDay'], $attributes['maxActiveEventsPerHour']);
 
 		parent::__construct($adfox);
 	}
