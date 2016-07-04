@@ -1,0 +1,12 @@
+{
+  "name": "vleukhin/adfox",
+  "description": "AdFox API Lib",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Viktor Leukhin",
+      "email": "vsleuhin@ya.ru"
+    }
+  ]
+}
