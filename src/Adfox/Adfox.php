@@ -2,6 +2,8 @@
 
 namespace AdFox;
 
+use AdFox\Campaigns\SuperCampaign;
+
 /**
  * AdFox API wrapper class.
  */
@@ -31,6 +33,12 @@ class AdFox {
 	const CODE_NO_ERROR = 0;
 	const CODE_AUTH_ERROR = -1;
 	const CODE_API_CALL_ERROR = 60;
+
+	const OBJECT_ACCOUNT = 'account';
+
+	const ACTION_LIST = 'list';
+
+	const ACTION_OBJECT_SUPERCAMPAIGN = 'superCampaign';
 
 	/**
 	 * AdFox constructor.
@@ -103,5 +111,19 @@ class AdFox {
 		}
 
 		return $response->result;
+	}
+
+	/**
+	 * Find SuperCampaign by ID
+	 *
+	 * @param $id
+	 * @return SuperCampaign
+	 * @throws AdfoxException
+	 */
+	public function findSuperCampaign($id)
+	{
+		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_LIST, self::ACTION_OBJECT_SUPERCAMPAIGN, ['actionObjectID' => $id]);
+		
+		return new SuperCampaign($this, (array) $response->data->row0);
 	}
 }
