@@ -36,7 +36,14 @@ class Flight extends BaseObject{
 	 *
 	 * @var AdFox
 	 */
-	protected $adfox = null;
+	protected $adfox;
+
+	/**
+	 * Campaign ID this filght is assign to
+	 *
+	 * @var int
+	 */
+	protected $superCampaignId;
 
 	/**
 	 * Attributes that can be modified
@@ -44,10 +51,17 @@ class Flight extends BaseObject{
 	 * @var array
 	 */
 	protected $attributes = [
-		'id', 'status', 'level',
+		'id', 'status', 'level', 'superCampaignId',
 		'maxImpressions', 'maxImpressionsPerDay', 'maxImpressionsPerHour',
 		'maxClicks', 'maxClicksPerDay', 'maxClicksPerHour',
 	];
+
+	/**
+	 * Campaign this filght is assign to
+	 *
+	 * @var Campaign
+	 */
+	public $campaign;
 
 	/**
 	 * Campaign constructor.
@@ -55,15 +69,37 @@ class Flight extends BaseObject{
 	 * @param AdFox $adfox
 	 * @param array $attributes
 	 */
-	public function __construct(AdFox $adfox, $attributes)
+	public function __construct(AdFox $adfox, $attributes, $relations)
 	{
+		parent::__construct($adfox);
+		
 		$this->id = $attributes['ID'];
 		$this->status = $attributes['status'];
 		$this->level = $attributes['level'];
+		$this->superCampaignId = $attributes['superCampaignID'];
 		$this->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
 		$this->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
+		
+		foreach ($relations as $relation)
+		{
+			$method = 'load'.ucfirst($relation);
+			if (method_exists($this, $method))
+			{
+				$this->$method();
+			}
+		}
+	}
 
-		parent::__construct($adfox);
+	/**
+	 * Load campaign this flight is assign to
+	 *
+	 * @return $this
+	 */
+	public function loadCampaign()
+	{
+		$this->campaign = $this->adfox->findCampaign($this->superCampaignId);
+
+		return $this;
 	}
 
 	/**
@@ -72,5 +108,20 @@ class Flight extends BaseObject{
 	protected function getType()
 	{
 		return AdFox::OBJECT_FLIGHT;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function toArray()
+	{
+		$array = parent::toArray();
+
+		if (!is_null($this->campaign))
+		{
+			$array['campaign'] = $this->campaign->toArray();
+		}
+
+		return $array;
 	}
 }

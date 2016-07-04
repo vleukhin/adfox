@@ -49,7 +49,7 @@ abstract class BaseObject {
 	}
 
 	/**
-	 * Get array represent of Object.
+	 * Get array represent of the Object.
 	 *
 	 * @return array
 	 */

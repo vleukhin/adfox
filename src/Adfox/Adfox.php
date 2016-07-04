@@ -141,14 +141,14 @@ class AdFox {
 	 * Find Campaign by ID
 	 *
 	 * @param $id
+	 * @param array $relations relations to load
 	 * @return Flight|null
-	 * @throws AdfoxException
 	 */
-	public function findFilght($id)
+	public function findFilght($id, $relations = [])
 	{
 		if ($attributes = $this->findObject(self::OBJECT_FLIGHT, $id))
 		{
-			return new Flight($this, $attributes);
+			return new Flight($this, $attributes, $relations);
 		}
 
 		return null;
