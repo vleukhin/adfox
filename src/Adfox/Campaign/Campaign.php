@@ -28,20 +28,30 @@ class Campaign extends BaseObject{
 	];
 
 	/**
+	 * Flights assigned to this campaign
+	 *
+	 * @var Flight[]
+	 */
+	public $flights = [];
+
+	/**
 	 * SuperCampaign constructor.
 	 *
 	 * @param AdFox $adfox
 	 * @param array $attributes
+	 * @param array $relations
 	 */
-	public function __construct(AdFox $adfox, $attributes)
+	public function __construct(AdFox $adfox, $attributes, $relations = [])
 	{
+		parent::__construct($adfox);
+
 		$this->id = $attributes['ID'];
 		$this->status = $attributes['status'];
 		$this->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
 		$this->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
 		$this->setActiveEventsLimits($attributes['maxActiveEvents'], $attributes['maxActiveEventsPerDay'], $attributes['maxActiveEventsPerHour']);
 
-		parent::__construct($adfox);
+		$this->loadRelations($relations);
 	}
 
 	/**
@@ -59,6 +69,20 @@ class Campaign extends BaseObject{
 		]);
 
 		return $this->adfox->findFlight($response->ID);
+	}
+
+	/**
+	 * Load flights assigned to this campaign
+	 *
+	 * @throws \AdFox\AdfoxException
+	 */
+	protected function loadFlights()
+	{
+		$response = $this->adfox->callApi(AdFox::OBJECT_ACCOUNT, AdFox::ACTION_LIST, AdFox::OBJECT_FLIGHT, ['superCampaignID' => $this->id]);
+		foreach ($response->data->children() as $flightData)
+		{
+			$this->flights[] = new Flight($this->adfox, (array) $flightData);
+		}
 	}
 
 	/**

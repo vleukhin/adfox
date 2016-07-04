@@ -124,14 +124,14 @@ class AdFox {
 	 * Find SuperCampaign by ID
 	 *
 	 * @param $id
+	 * @param array $relations
 	 * @return Campaign|null
-	 * @throws AdfoxException
 	 */
-	public function findCampaign($id)
+	public function findCampaign($id, $relations = [])
 	{
 		if ($attributes = $this->findObject(self::OBJECT_CAMPAIGN, $id))
 		{
-			return new Campaign($this, (array) $attributes);
+			return new Campaign($this, (array) $attributes, $relations);
 
 		}
 

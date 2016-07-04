@@ -82,6 +82,24 @@ abstract class BaseObject {
 	}
 
 	/**
+	 * Loads relations if possible
+	 *
+	 * @param $relations
+	 */
+	protected function loadRelations($relations)
+	{
+		foreach ($relations as $relation)
+		{
+			$method = 'load'.ucfirst($relation);
+			if (method_exists($this, $method))
+			{
+				$this->$method();
+			}
+		}
+	}
+
+
+	/**
 	 * Get Object type. String constant from AdFox class.
 	 *
 	 * @return string

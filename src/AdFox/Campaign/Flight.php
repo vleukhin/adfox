@@ -69,7 +69,7 @@ class Flight extends BaseObject{
 	 * @param AdFox $adfox
 	 * @param array $attributes
 	 */
-	public function __construct(AdFox $adfox, $attributes, $relations)
+	public function __construct(AdFox $adfox, $attributes, $relations = [])
 	{
 		parent::__construct($adfox);
 		
@@ -80,14 +80,7 @@ class Flight extends BaseObject{
 		$this->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
 		$this->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
 		
-		foreach ($relations as $relation)
-		{
-			$method = 'load'.ucfirst($relation);
-			if (method_exists($this, $method))
-			{
-				$this->$method();
-			}
-		}
+		$this->loadRelations($relations);
 	}
 
 	/**
