@@ -3,6 +3,7 @@
 namespace AdFox;
 
 use AdFox\Campaigns\SuperCampaign;
+use AdFox\Campaigns\Campaign;
 
 /**
  * AdFox API wrapper class.
@@ -35,10 +36,15 @@ class AdFox {
 	const CODE_API_CALL_ERROR = 60;
 
 	const OBJECT_ACCOUNT = 'account';
+	const OBJECT_SUPERCAMPAIGN = 'superCampaign';
+	const OBJECT_CAMPAIGN = 'campaign';
 
 	const ACTION_LIST = 'list';
+	const ACTION_MODIFY = 'modify';
 
-	const ACTION_OBJECT_SUPERCAMPAIGN = 'superCampaign';
+	const OBJECT_STATUS_ACTIVE = 0;
+	const OBJECT_STATUS_PAUSED = 1;
+	const OBJECT_STATUS_COMPLETED = 2;
 
 	/**
 	 * AdFox constructor.
@@ -75,7 +81,7 @@ class AdFox {
 	 * @return \SimpleXMLElement[]
 	 * @throws AdfoxException
 	 */
-	protected function callApi($object, $action, $actionObject, $parameters = [])
+	public function callApi($object, $action, $actionObject = null, $parameters = [])
 	{
 		$request = [
 			'loginAccount' => $this->login,
@@ -117,13 +123,54 @@ class AdFox {
 	 * Find SuperCampaign by ID
 	 *
 	 * @param $id
-	 * @return SuperCampaign
+	 * @return SuperCampaign|null
 	 * @throws AdfoxException
 	 */
 	public function findSuperCampaign($id)
 	{
-		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_LIST, self::ACTION_OBJECT_SUPERCAMPAIGN, ['actionObjectID' => $id]);
-		
-		return new SuperCampaign($this, (array) $response->data->row0);
+		if ($attributes = $this->findObject(self::OBJECT_SUPERCAMPAIGN, $id))
+		{
+			return new SuperCampaign($this, (array) $attributes);
+
+		}
+
+		return null;
 	}
+
+	/**
+	 * Find Campaign by ID
+	 *
+	 * @param $id
+	 * @return Campaign|null
+	 * @throws AdfoxException
+	 */
+	public function findCampaign($id)
+	{
+		if ($attributes = $this->findObject(self::OBJECT_CAMPAIGN, $id))
+		{
+			return new Campaign($this, $attributes);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Find object of type by id
+	 *
+	 * @param $type
+	 * @param $id
+	 * @return array|bool
+	 * @throws AdfoxException
+	 */
+	public function findObject($type, $id)
+	{
+		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_LIST, $type, ['actionObjectID' => $id]);
+
+		if (!empty($response->data))
+		{
+			return (array) $response->data->row0;
+		}
+
+		return false;
+	} 
 }
