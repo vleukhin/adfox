@@ -36,9 +36,9 @@ trait HasActiveEventsRestrictions {
 	 */
 	public function setActiveEventsLimits($total = null, $day = null, $hour = null)
 	{
-		$this->maxActiveEvents = is_null($total) ? $this->getMaxActiveEvents() : $total;
-		$this->maxActiveEventsPerDay = is_null($day) ? $this->getMaxActiveEventsPerDay() : $day;
-		$this->maxActiveEventsPerHour = is_null($hour) ? $this->getMaxActiveEventsPerHour() : $hour;
+		$this->maxActiveEvents = is_null($total) ? $this->getMaxActiveEvents() : (int) $total;
+		$this->maxActiveEventsPerDay = is_null($day) ? $this->getMaxActiveEventsPerDay() : (int) $day;
+		$this->maxActiveEventsPerHour = is_null($hour) ? $this->getMaxActiveEventsPerHour() : (int) $hour;
 
 		return $this;
 	}

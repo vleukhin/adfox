@@ -40,6 +40,7 @@ class AdFox {
 	const OBJECT_FLIGHT = 'campaign';
 
 	const ACTION_LIST = 'list';
+	const ACTION_ADD = 'add';
 	const ACTION_MODIFY = 'modify';
 
 	const OBJECT_STATUS_ACTIVE = 0;
@@ -116,7 +117,7 @@ class AdFox {
 			throw new AdfoxException((string) $response->status->error, (int) $response->status->code);
 		}
 
-		return $response->result;
+		return $response->result ? $response->result : $response->status;
 	}
 
 	/**
@@ -144,7 +145,7 @@ class AdFox {
 	 * @param array $relations relations to load
 	 * @return Flight|null
 	 */
-	public function findFilght($id, $relations = [])
+	public function findFlight($id, $relations = [])
 	{
 		if ($attributes = $this->findObject(self::OBJECT_FLIGHT, $id))
 		{
@@ -172,5 +173,20 @@ class AdFox {
 		}
 
 		return false;
-	} 
+	}
+
+	/**
+	 * Creates campaign
+	 *
+	 * @param $name
+	 * @param $advertiserId
+	 * @return Campaign
+	 * @throws AdfoxException
+	 */
+	public function createCampaign($name, $advertiserId)
+	{
+		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_ADD, self::OBJECT_CAMPAIGN, ['name' => $name, 'advertiserID' => $advertiserId]);
+
+		return $this->findCampaign($response->ID);
+	}
 }

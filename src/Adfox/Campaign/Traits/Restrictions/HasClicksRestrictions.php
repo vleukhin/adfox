@@ -36,9 +36,9 @@ trait HasClicksRestrictions {
 	 */
 	public function setClicksLimits($total = null, $day = null, $hour = null)
 	{
-		$this->maxClicks = is_null($total) ? $this->getMaxClicks() : $total;
-		$this->maxClicksPerDay = is_null($day) ? $this->getMaxClicksPerDay() : $day;
-		$this->maxClicksPerHour = is_null($hour) ? $this->getMaxClicksPerHour() : $hour;
+		$this->maxClicks = is_null($total) ? $this->getMaxClicks() : (int) $total;
+		$this->maxClicksPerDay = is_null($day) ? $this->getMaxClicksPerDay() : (int) $day;
+		$this->maxClicksPerHour = is_null($hour) ? $this->getMaxClicksPerHour() : (int) $hour;
 
 		return $this;
 	}

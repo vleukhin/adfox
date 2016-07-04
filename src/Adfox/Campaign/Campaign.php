@@ -45,6 +45,23 @@ class Campaign extends BaseObject{
 	}
 
 	/**
+	 * Creates flight
+	 *
+	 * @param null $name
+	 * @return Flight|null
+	 * @throws \AdFox\AdfoxException
+	 */
+	public function createFlight($name = null)
+	{
+		$response = $this->adfox->callApi(AdFox::OBJECT_ACCOUNT, AdFox::ACTION_ADD, AdFox::OBJECT_FLIGHT, [
+			'name' => $name,
+			'superCampaignID' => $this->id,
+		]);
+
+		return $this->adfox->findFlight($response->ID);
+	}
+
+	/**
 	 * Set AdFox instance to send requests to
 	 *
 	 * @param AdFox $adFox

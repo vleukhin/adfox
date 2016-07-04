@@ -77,6 +77,8 @@ abstract class BaseObject {
 	{
 		$parameters = ['objectID' => $this->id] + $this->toArray();
 		$this->adfox->callApi($this->getType(), AdFox::ACTION_MODIFY, null, $parameters);
+
+		return $this;
 	}
 
 	/**

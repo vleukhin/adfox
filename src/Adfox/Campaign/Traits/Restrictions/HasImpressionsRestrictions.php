@@ -36,9 +36,9 @@ trait HasImpressionsRestrictions {
 	 */
 	public function setImpressionsLimits($total = null, $day = null, $hour = null)
 	{
-		$this->maxImpressions = is_null($total) ? $this->getMaxImpressions() : $total;
-		$this->maxImpressionsPerDay = is_null($day) ? $this->getMaxImpressionsPerDay() : $day;
-		$this->maxImpressionsPerHour = is_null($hour) ? $this->getMaxImpressionsPerHour() : $hour;
+		$this->maxImpressions = is_null($total) ? $this->getMaxImpressions() : (int) $total;
+		$this->maxImpressionsPerDay = is_null($day) ? $this->getMaxImpressionsPerDay() : (int) $day;
+		$this->maxImpressionsPerHour = is_null($hour) ? $this->getMaxImpressionsPerHour() : (int) $hour;
 
 		return $this;
 	}
