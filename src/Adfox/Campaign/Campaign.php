@@ -3,14 +3,18 @@
 namespace AdFox\Campaigns;
 
 use AdFox\AdFox;
-use AdFox\Campaigns\Traits\HasRestrictions;
+use AdFox\Campaigns\Traits\Restrictions\HasActiveEventsRestrictions;
+use AdFox\Campaigns\Traits\Restrictions\HasClicksRestrictions;
+use AdFox\Campaigns\Traits\Restrictions\HasImpressionsRestrictions;
 use AdFox\Campaigns\Traits\HasStatus;
 
 class Campaign extends BaseObject{
 
 	use HasStatus;
-	use HasRestrictions;
-		
+	use HasActiveEventsRestrictions;
+	use HasClicksRestrictions;
+	use HasImpressionsRestrictions;
+
 	/**
 	 * Attributes that can be modified
 	 *
