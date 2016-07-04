@@ -2,8 +2,8 @@
 
 namespace AdFox;
 
-use AdFox\Campaigns\SuperCampaign;
 use AdFox\Campaigns\Campaign;
+use AdFox\Campaigns\Flight;
 
 /**
  * AdFox API wrapper class.
@@ -36,8 +36,8 @@ class AdFox {
 	const CODE_API_CALL_ERROR = 60;
 
 	const OBJECT_ACCOUNT = 'account';
-	const OBJECT_SUPERCAMPAIGN = 'superCampaign';
-	const OBJECT_CAMPAIGN = 'campaign';
+	const OBJECT_CAMPAIGN = 'superCampaign';
+	const OBJECT_FLIGHT = 'campaign';
 
 	const ACTION_LIST = 'list';
 	const ACTION_MODIFY = 'modify';
@@ -123,14 +123,14 @@ class AdFox {
 	 * Find SuperCampaign by ID
 	 *
 	 * @param $id
-	 * @return SuperCampaign|null
+	 * @return Campaign|null
 	 * @throws AdfoxException
 	 */
-	public function findSuperCampaign($id)
+	public function findCampaign($id)
 	{
-		if ($attributes = $this->findObject(self::OBJECT_SUPERCAMPAIGN, $id))
+		if ($attributes = $this->findObject(self::OBJECT_CAMPAIGN, $id))
 		{
-			return new SuperCampaign($this, (array) $attributes);
+			return new Campaign($this, (array) $attributes);
 
 		}
 
@@ -141,14 +141,14 @@ class AdFox {
 	 * Find Campaign by ID
 	 *
 	 * @param $id
-	 * @return Campaign|null
+	 * @return Flight|null
 	 * @throws AdfoxException
 	 */
-	public function findCampaign($id)
+	public function findFilght($id)
 	{
-		if ($attributes = $this->findObject(self::OBJECT_CAMPAIGN, $id))
+		if ($attributes = $this->findObject(self::OBJECT_FLIGHT, $id))
 		{
-			return new Campaign($this, $attributes);
+			return new Flight($this, $attributes);
 		}
 
 		return null;
