@@ -9,6 +9,7 @@
 namespace AdFox\Campaigns;
 
 use AdFox\AdFox;
+use AdFox\Campaigns\Banner\Banner;
 use AdFox\Campaigns\Banner\Template;
 use AdFox\Campaigns\Traits\Restrictions\HasClicksRestrictions;
 use AdFox\Campaigns\Traits\Restrictions\HasImpressionsRestrictions;
@@ -107,6 +108,16 @@ class Flight extends BaseObject{
 		$banner->setParams($bannerParams);
 
 		return $banner;
+	}
+
+	/**
+	 * Add banner to this flight
+	 *
+	 * @param Banner $banner
+	 */
+	public function addBanner(Banner $banner)
+	{
+		$banner->addToFlight($this);
 	}
 
 	/**
