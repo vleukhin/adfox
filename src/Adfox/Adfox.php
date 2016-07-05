@@ -33,6 +33,7 @@ class AdFox {
 
 	const CODE_NO_ERROR = 0;
 	const CODE_AUTH_ERROR = -1;
+	const CODE_PARAM_MISSING = -7;
 	const CODE_API_CALL_ERROR = 60;
 
 	const OBJECT_ACCOUNT = 'account';
@@ -114,7 +115,14 @@ class AdFox {
 		}
 		elseif((string) $response->status->code != self::CODE_NO_ERROR)
 		{
-			throw new AdfoxException((string) $response->status->error, (int) $response->status->code);
+			$message = (string) $response->status->error;
+
+			if ($response->status->code == self::CODE_PARAM_MISSING)
+			{
+				$message .= ': ' . (string) $response->status->parameter;
+			}
+
+			throw new AdfoxException($message, (int) $response->status->code);
 		}
 
 		return $response->result ? $response->result : $response->status;
