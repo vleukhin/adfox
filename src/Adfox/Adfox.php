@@ -2,6 +2,7 @@
 
 namespace AdFox;
 
+use AdFox\Campaigns\Banner\Type as BannerType;
 use AdFox\Campaigns\Campaign;
 use AdFox\Campaigns\Flight;
 
@@ -39,6 +40,7 @@ class AdFox {
 	const OBJECT_ACCOUNT = 'account';
 	const OBJECT_CAMPAIGN = 'superCampaign';
 	const OBJECT_FLIGHT = 'campaign';
+	const OBJECT_BANNER_TYPE = 'bannerType';
 
 	const ACTION_LIST = 'list';
 	const ACTION_ADD = 'add';
@@ -164,6 +166,45 @@ class AdFox {
 	}
 
 	/**
+	 * Find BannerType by id
+	 *
+	 * @param $id
+	 */
+	public function findBannerType($id, $relations = [])
+	{
+		if ($attributes = $this->findObject(self::OBJECT_BANNER_TYPE, $id))
+		{
+			return new BannerType($this, $attributes, $relations);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Find BannerType by name
+	 *
+	 * @param $name
+	 * @return BannerType|false
+	 */
+	public function findBannerTypeByName($name)
+	{
+		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_LIST, self::OBJECT_BANNER_TYPE, ['limit' => 1000]);
+
+		if (!empty($response->data))
+		{
+			foreach ($response->data->children() as $bannerType)
+			{
+				if ((string) $bannerType->name == $name)
+				{
+					return new BannerType($this, (array) $bannerType);
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	/**
 	 * Find object of type by id
 	 *
 	 * @param $type
@@ -171,7 +212,7 @@ class AdFox {
 	 * @return array|bool
 	 * @throws AdfoxException
 	 */
-	public function findObject($type, $id)
+	protected function findObject($type, $id)
 	{
 		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_LIST, $type, ['actionObjectID' => $id]);
 
