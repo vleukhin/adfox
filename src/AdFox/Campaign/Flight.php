@@ -17,6 +17,8 @@ use AdFox\Campaigns\Traits\Restrictions\HasDateRestrictions;
 use AdFox\Campaigns\Traits\Restrictions\HasImpressionsRestrictions;
 use AdFox\Campaigns\Traits\HasStatus;
 use AdFox\Campaigns\Traits\HasLevel;
+use AdFox\Site\Place;
+use AdFox\Site\Site;
 
 class Flight extends BaseObject{
 	
@@ -129,6 +131,78 @@ class Flight extends BaseObject{
 	public function addBanner(Banner $banner)
 	{
 		$banner->addToFlight($this);
+	}
+
+	/**
+	 * Place this flight on the given place
+	 *
+	 * @param Place $place
+	 *
+	 * @return $this
+	 */
+	public function placeOnPlace(Place $place)
+	{
+		$this->place(AdFox::OBJECT_PLACE, $place->id);
+
+		return $this;
+	}
+
+	/**
+	 * Remove this flight from the given place
+	 *
+	 * @param Place $place
+	 *
+	 * @return $this
+	 */
+	public function removeFromPlace(Place $place)
+	{
+		$this->place(AdFox::OBJECT_PLACE, $place->id, true);
+
+		return $this;
+	}
+
+	/**
+	 * Place this flight on the given site
+	 *
+	 * @param Site $site
+	 *
+	 * @return $this
+	 */
+	public function placeOnSite(Site $site)
+	{
+		$this->place(AdFox::OBJECT_SITE, $site->id);
+
+		return $this;
+	}
+
+	/**
+	 * Remove this flight from the given site
+	 *
+	 * @param Site $site
+	 *
+	 * @return $this
+	 */
+	public function removeFromSite(Site $site)
+	{
+		$this->place(AdFox::OBJECT_SITE, $site->id, true);
+
+		return $this;
+	}
+
+	/**
+	 * Place/Remove this flight object on/from given placable object
+	 *
+	 * @param int $objectId
+	 * @param bool $remove remove flag, default is false
+	 * @throws \AdFox\AdfoxException
+	 */
+	protected function place($type, $objectId, $remove = false)
+	{
+		$this->adfox->callApi(AdFox::OBJECT_FLIGHT, AdFox::ACTION_PLACE, $type, [
+			'actionStatus' => (int) !$remove,
+			'objectID' => $this->id,
+			'actionObjectID' => $objectId
+		]);
 	}
 
 	/**

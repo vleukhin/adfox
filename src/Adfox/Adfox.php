@@ -53,6 +53,7 @@ class AdFox {
 	const ACTION_LIST = 'list';
 	const ACTION_ADD = 'add';
 	const ACTION_MODIFY = 'modify';
+	const ACTION_PLACE = 'placing';
 
 	const OBJECT_STATUS_ACTIVE = 0;
 	const OBJECT_STATUS_PAUSED = 1;
