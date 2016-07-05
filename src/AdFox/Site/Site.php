@@ -48,6 +48,30 @@ class Site extends BaseObject{
 	}
 
 	/**
+	 * Find place on this site by name
+	 *
+	 * @param $name
+	 * @return Place|null
+	 */
+	public function findPlaceByName($name)
+	{
+		if (empty($this->places))
+		{
+			$this->loadPlaces();
+		}
+
+		foreach ($this->places as $place)
+		{
+			if ($place->name == $name)
+			{
+				return $place;
+			}
+		}
+
+		return null;
+	}
+	
+	/**
 	 * Loads this site places
 	 *
 	 * @throws \AdFox\AdfoxException

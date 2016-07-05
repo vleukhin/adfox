@@ -253,6 +253,31 @@ class AdFox {
 	}
 
 	/**
+	 * Find BannerType by id
+	 *
+	 * @param $name
+	 * @param array $relations
+	 * @return Site|null
+	 */
+	public function findSiteByName($name, $relations = [])
+	{
+		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_LIST, self::OBJECT_SITE, ['limit' => 1000]);
+
+		if (!empty($response->data))
+		{
+			foreach ($response->data->children() as $site)
+			{
+				if ((string) $site->name == $name)
+				{
+					return Site::createFromResponse($this, (array) $site, $relations);
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Find object of type by id
 	 *
 	 * @param $type

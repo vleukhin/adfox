@@ -62,6 +62,14 @@ class Place extends BaseObject{
 	}
 
 	/**
+	 * Loads banner type of this place
+	 */
+	public function loadBannerType()
+	{
+		$this->bannerType = $this->adfox->findBannerType($this->bannerTypeID);
+	}
+
+	/**
 	 * Get Object type. String constant from AdFox class.
 	 *
 	 * @return string
