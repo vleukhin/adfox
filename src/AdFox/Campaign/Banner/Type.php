@@ -60,14 +60,13 @@ class Type extends BaseObject{
 		}
 	}
 
-
 	/**
-	 * Find template if this type by id
+	 * Find template of this type by id
 	 *
 	 * @param $name
 	 * @return Template|null
 	 */
-	public function findeTemplate($name)
+	public function findTemplate($name)
 	{
 		if (empty($this->templates))
 		{

@@ -20,7 +20,7 @@ class Banner extends BaseObject{
 	 * @var array
 	 */
 	protected $attributes = [
-		'id', 'status', 'level', 'superCampaignId',
+		'id', 'status', 'campaignId',
 		'maxImpressions', 'maxImpressionsPerDay', 'maxImpressionsPerHour',
 		'maxClicks', 'maxClicksPerDay', 'maxClicksPerHour',
 	];
