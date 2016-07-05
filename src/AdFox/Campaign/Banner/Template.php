@@ -22,6 +22,13 @@ class Template extends BaseObject{
 	public $bannerType;
 
 	/**
+	 * Template name
+	 *
+	 * @var string
+	 */
+	public $name;
+
+	/**
 	 * Attributes that can be modified
 	 *
 	 * @var array

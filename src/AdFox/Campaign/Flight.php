@@ -9,6 +9,7 @@
 namespace AdFox\Campaigns;
 
 use AdFox\AdFox;
+use AdFox\Campaigns\Banner\Template;
 use AdFox\Campaigns\Traits\Restrictions\HasClicksRestrictions;
 use AdFox\Campaigns\Traits\Restrictions\HasImpressionsRestrictions;
 use AdFox\Campaigns\Traits\HasStatus;
@@ -25,25 +26,11 @@ class Flight extends BaseObject{
 	const ROTATION_PRECENT = 1;
 
 	/**
-	 * Campaign ID
-	 *
-	 * @var int
-	 */
-	public $id = null;
-
-	/**
-	 * Adfox lib instance
-	 *
-	 * @var AdFox
-	 */
-	protected $adfox;
-
-	/**
 	 * Campaign ID this filght is assign to
 	 *
 	 * @var int
 	 */
-	protected $superCampaignId;
+	protected $superCampaignID;
 
 	/**
 	 * Attributes that can be modified
@@ -64,10 +51,11 @@ class Flight extends BaseObject{
 	public $campaign;
 
 	/**
-	 * Campaign constructor.
+	 * Flight constructor.
 	 *
 	 * @param AdFox $adfox
 	 * @param array $attributes
+	 * @param array $relations
 	 */
 	public function __construct(AdFox $adfox, $attributes, $relations = [])
 	{
@@ -76,7 +64,7 @@ class Flight extends BaseObject{
 		$this->id = $attributes['ID'];
 		$this->status = $attributes['status'];
 		$this->level = $attributes['level'];
-		$this->superCampaignId = $attributes['superCampaignID'];
+		$this->superCampaignID = $attributes['superCampaignID'];
 		$this->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
 		$this->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
 		
@@ -90,9 +78,32 @@ class Flight extends BaseObject{
 	 */
 	public function loadCampaign()
 	{
-		$this->campaign = $this->adfox->findCampaign($this->superCampaignId);
+		$this->campaign = $this->adfox->findCampaign($this->superCampaignID);
 
 		return $this;
+	}
+
+	/**
+	 * Creates banner
+	 *
+	 * @param null $name
+	 * @param Template $template
+	 * @param $bannerParams
+	 *
+	 * @return Flight|null
+	 * @throws \AdFox\AdfoxException
+	 */
+	public function createBanner($name, Template $template, $bannerParams)
+	{
+		$params = [
+			'name' => $name,
+			'campaignID' => $this->id,
+			'templateID' => $template->id,
+		];
+
+		$response = $this->adfox->callApi(AdFox::OBJECT_ACCOUNT, AdFox::ACTION_ADD, AdFox::OBJECT_BANNER, $params + $bannerParams);
+
+		return $this->adfox->findBanner($response->ID);
 	}
 
 	/**

@@ -60,6 +60,31 @@ class Type extends BaseObject{
 		}
 	}
 
+
+	/**
+	 * Find template if this type by id
+	 *
+	 * @param $name
+	 * @return Template|null
+	 */
+	public function findeTemplate($name)
+	{
+		if (empty($this->templates))
+		{
+			$this->loadTemplates();
+		}
+
+		foreach ($this->templates as $template)
+		{
+			if ($template->name == $name)
+			{
+				return $template;
+			}
+		}
+
+		return null;
+	}
+
 	/**
 	 * Get Object type. String constant from AdFox class.
 	 *
