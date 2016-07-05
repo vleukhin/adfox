@@ -6,6 +6,7 @@ use AdFox\Campaigns\Banner\Banner;
 use AdFox\Campaigns\Banner\Type as BannerType;
 use AdFox\Campaigns\Campaign;
 use AdFox\Campaigns\Flight;
+use AdFox\Site\Site;
 
 /**
  * AdFox API wrapper class.
@@ -46,6 +47,8 @@ class AdFox {
 	const OBJECT_BANNER = 'banner';
 	const OBJECT_BANNER_TYPE = 'bannerType';
 	const OBJECT_BANNER_TEMPLATE = 'template';
+	const OBJECT_SITE = 'website';
+	const OBJECT_PLACE = 'place';
 
 	const ACTION_LIST = 'list';
 	const ACTION_ADD = 'add';
@@ -230,6 +233,23 @@ class AdFox {
 		}
 		
 		return false;
+	}
+
+	/**
+	 * Find BannerType by id
+	 *
+	 * @param $id
+	 * @param array $relations
+	 * @return Site|null
+	 */
+	public function findSite($id, $relations = [])
+	{
+		if ($attributes = $this->findObject(self::OBJECT_SITE, $id))
+		{
+			return Site::createFromResponse($this, $attributes, $relations);
+		}
+
+		return null;
 	}
 
 	/**

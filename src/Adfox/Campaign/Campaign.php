@@ -97,16 +97,6 @@ class Campaign extends BaseObject{
 	}
 
 	/**
-	 * Set AdFox instance to send requests to
-	 *
-	 * @param AdFox $adFox
-	 */
-	public function setAdfox(AdFox $adFox)
-	{
-		$this->adfox = $adFox;
-	}
-
-	/**
 	 * {@inheritdoc}
 	 */
 	protected function getType()
