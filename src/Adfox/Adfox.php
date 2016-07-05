@@ -41,6 +41,7 @@ class AdFox {
 	const OBJECT_CAMPAIGN = 'superCampaign';
 	const OBJECT_FLIGHT = 'campaign';
 	const OBJECT_BANNER_TYPE = 'bannerType';
+	const OBJECT_BANNER_TEMPLATE = 'template';
 
 	const ACTION_LIST = 'list';
 	const ACTION_ADD = 'add';
@@ -184,9 +185,11 @@ class AdFox {
 	 * Find BannerType by name
 	 *
 	 * @param $name
+	 * @param array $relations
 	 * @return BannerType|false
+	 * @throws AdfoxException
 	 */
-	public function findBannerTypeByName($name)
+	public function findBannerTypeByName($name, $relations = [])
 	{
 		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_LIST, self::OBJECT_BANNER_TYPE, ['limit' => 1000]);
 
@@ -196,7 +199,7 @@ class AdFox {
 			{
 				if ((string) $bannerType->name == $name)
 				{
-					return new BannerType($this, (array) $bannerType);
+					return new BannerType($this, (array) $bannerType, $relations);
 				}
 			}
 		}
