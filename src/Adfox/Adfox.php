@@ -35,8 +35,9 @@ class AdFox {
 
 	const CODE_NO_ERROR = 0;
 	const CODE_AUTH_ERROR = -1;
+	const CODE_PARAM_INCORRECT = -6;
 	const CODE_PARAM_MISSING = -7;
-	const CODE_PARAM_IS_EMPTY = -9;
+	const CODE_PARAM_EMPTY = -9;
 	const CODE_API_CALL_ERROR = 60;
 
 	const OBJECT_ACCOUNT = 'account';
@@ -125,7 +126,7 @@ class AdFox {
 		{
 			$message = (string) $response->status->error;
 
-			if (in_array($response->status->code, [self::CODE_PARAM_MISSING, self::CODE_PARAM_IS_EMPTY]))
+			if (in_array($response->status->code, [self::CODE_PARAM_MISSING, self::CODE_PARAM_EMPTY, self::CODE_PARAM_INCORRECT]))
 			{
 				$message .= ': ' . (string) $response->status->parameter;
 			}
