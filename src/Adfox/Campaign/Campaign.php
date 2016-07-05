@@ -94,6 +94,8 @@ class Campaign extends BaseObject{
 		{
 			$this->flights[] = new Flight($this->adfox, (array) $flightData);
 		}
+
+		return $this;
 	}
 
 	/**

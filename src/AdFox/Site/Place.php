@@ -67,6 +67,8 @@ class Place extends BaseObject{
 	public function loadBannerType()
 	{
 		$this->bannerType = $this->adfox->findBannerType($this->bannerTypeID);
+
+		return $this;
 	}
 
 	/**

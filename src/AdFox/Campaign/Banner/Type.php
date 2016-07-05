@@ -58,6 +58,8 @@ class Type extends BaseObject{
 			$template = new Template($this->adfox, (array) $templatetData);
 			$this->templates[] = $template;
 		}
+
+		return $this;
 	}
 
 	/**

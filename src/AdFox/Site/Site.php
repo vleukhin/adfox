@@ -83,6 +83,8 @@ class Site extends BaseObject{
 		{
 			$this->places[] = Place::createFromResponse($this->adfox, (array) $placeData);
 		}
+
+		return $this;
 	}
 
 	/**
