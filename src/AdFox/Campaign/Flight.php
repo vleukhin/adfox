@@ -103,7 +103,10 @@ class Flight extends BaseObject{
 
 		$response = $this->adfox->callApi(AdFox::OBJECT_ACCOUNT, AdFox::ACTION_ADD, AdFox::OBJECT_BANNER, $params + $bannerParams);
 
-		return $this->adfox->findBanner($response->ID);
+		$banner = $this->adfox->findBanner($response->ID);
+		$banner->setParams($bannerParams);
+
+		return $banner;
 	}
 
 	/**

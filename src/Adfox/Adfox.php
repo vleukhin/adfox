@@ -180,7 +180,7 @@ class AdFox {
 	{
 		if ($attributes = $this->findObject(self::OBJECT_BANNER, $id))
 		{
-			return new Banner($this, $attributes, $relations);
+			return Banner::createFromResponse($this, $attributes, $relations);
 		}
 
 		return null;
