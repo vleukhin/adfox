@@ -2,6 +2,8 @@
 
 namespace AdFox;
 
+use AdFox\Campaigns\Banner\Banner;
+use AdFox\Campaigns\Banner\Type as BannerType;
 use AdFox\Campaigns\Campaign;
 use AdFox\Campaigns\Flight;
 
@@ -33,11 +35,16 @@ class AdFox {
 
 	const CODE_NO_ERROR = 0;
 	const CODE_AUTH_ERROR = -1;
+	const CODE_PARAM_MISSING = -7;
+	const CODE_PARAM_IS_EMPTY = -9;
 	const CODE_API_CALL_ERROR = 60;
 
 	const OBJECT_ACCOUNT = 'account';
 	const OBJECT_CAMPAIGN = 'superCampaign';
 	const OBJECT_FLIGHT = 'campaign';
+	const OBJECT_BANNER = 'banner';
+	const OBJECT_BANNER_TYPE = 'bannerType';
+	const OBJECT_BANNER_TEMPLATE = 'template';
 
 	const ACTION_LIST = 'list';
 	const ACTION_ADD = 'add';
@@ -114,7 +121,14 @@ class AdFox {
 		}
 		elseif((string) $response->status->code != self::CODE_NO_ERROR)
 		{
-			throw new AdfoxException((string) $response->status->error, (int) $response->status->code);
+			$message = (string) $response->status->error;
+
+			if (in_array($response->status->code, [self::CODE_PARAM_MISSING, self::CODE_PARAM_IS_EMPTY]))
+			{
+				$message .= ': ' . (string) $response->status->parameter;
+			}
+
+			throw new AdfoxException($message, (int) $response->status->code);
 		}
 
 		return $response->result ? $response->result : $response->status;
@@ -124,14 +138,14 @@ class AdFox {
 	 * Find SuperCampaign by ID
 	 *
 	 * @param $id
+	 * @param array $relations
 	 * @return Campaign|null
-	 * @throws AdfoxException
 	 */
-	public function findCampaign($id)
+	public function findCampaign($id, $relations = [])
 	{
 		if ($attributes = $this->findObject(self::OBJECT_CAMPAIGN, $id))
 		{
-			return new Campaign($this, (array) $attributes);
+			return new Campaign($this, (array) $attributes, $relations);
 
 		}
 
@@ -156,6 +170,66 @@ class AdFox {
 	}
 
 	/**
+	 * Find Banner by ID
+	 *
+	 * @param $id
+	 * @param array $relations relations to load
+	 * @return Banner|null
+	 */
+	public function findBanner($id, $relations = [])
+	{
+		if ($attributes = $this->findObject(self::OBJECT_BANNER, $id))
+		{
+			return Banner::createFromResponse($this, $attributes, $relations);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Find BannerType by id
+	 *
+	 * @param $id
+	 * @param array $relations
+	 * @return BannerType|null
+	 */
+	public function findBannerType($id, $relations = [])
+	{
+		if ($attributes = $this->findObject(self::OBJECT_BANNER_TYPE, $id))
+		{
+			return new BannerType($this, $attributes, $relations);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Find BannerType by name
+	 *
+	 * @param $name
+	 * @param array $relations
+	 * @return BannerType|false
+	 * @throws AdfoxException
+	 */
+	public function findBannerTypeByName($name, $relations = [])
+	{
+		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_LIST, self::OBJECT_BANNER_TYPE, ['limit' => 1000]);
+
+		if (!empty($response->data))
+		{
+			foreach ($response->data->children() as $bannerType)
+			{
+				if ((string) $bannerType->name == $name)
+				{
+					return new BannerType($this, (array) $bannerType, $relations);
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	/**
 	 * Find object of type by id
 	 *
 	 * @param $type
@@ -163,7 +237,7 @@ class AdFox {
 	 * @return array|bool
 	 * @throws AdfoxException
 	 */
-	public function findObject($type, $id)
+	protected function findObject($type, $id)
 	{
 		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_LIST, $type, ['actionObjectID' => $id]);
 
