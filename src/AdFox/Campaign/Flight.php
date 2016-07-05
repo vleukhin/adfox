@@ -12,6 +12,7 @@ use AdFox\AdFox;
 use AdFox\Campaigns\Banner\Banner;
 use AdFox\Campaigns\Banner\Template;
 use AdFox\Campaigns\Traits\Restrictions\HasClicksRestrictions;
+use AdFox\Campaigns\Traits\Restrictions\HasDateRestrictions;
 use AdFox\Campaigns\Traits\Restrictions\HasImpressionsRestrictions;
 use AdFox\Campaigns\Traits\HasStatus;
 use AdFox\Campaigns\Traits\HasLevel;
@@ -22,6 +23,7 @@ class Flight extends BaseObject{
 	use HasLevel;
 	use HasClicksRestrictions;
 	use HasImpressionsRestrictions;
+	use HasDateRestrictions;
 
 	const ROTATION_PRIORY = 0;
 	const ROTATION_PRECENT = 1;
@@ -42,7 +44,15 @@ class Flight extends BaseObject{
 		'id', 'status', 'level', 'superCampaignId',
 		'maxImpressions', 'maxImpressionsPerDay', 'maxImpressionsPerHour',
 		'maxClicks', 'maxClicksPerDay', 'maxClicksPerHour',
+		'dateStart', 'dateEnd',
 	];
+
+	/**
+	 * Attributes that can be set to null
+	 *
+	 * @var array
+	 */
+	protected $nullable = ['dateEnd'];
 
 	/**
 	 * Campaign this filght is assign to

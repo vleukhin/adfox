@@ -54,6 +54,8 @@ class AdFox {
 	const OBJECT_STATUS_PAUSED = 1;
 	const OBJECT_STATUS_COMPLETED = 2;
 
+	const DATE_FORMAT = 'Y-m-d H:i';
+
 	/**
 	 * AdFox constructor.
 	 *
