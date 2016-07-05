@@ -6,9 +6,7 @@
  * Time: 14:07
  */
 
-namespace AdFox\Campaigns;
-
-use AdFox\AdFox;
+namespace AdFox;
 
 abstract class BaseObject {
 

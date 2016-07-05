@@ -9,6 +9,7 @@
 namespace AdFox\Campaigns;
 
 use AdFox\AdFox;
+use AdFox\BaseObject;
 use AdFox\Campaigns\Banner\Banner;
 use AdFox\Campaigns\Banner\Template;
 use AdFox\Campaigns\Traits\Restrictions\HasClicksRestrictions;

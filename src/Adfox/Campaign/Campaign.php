@@ -3,6 +3,7 @@
 namespace AdFox\Campaigns;
 
 use AdFox\AdFox;
+use AdFox\BaseObject;
 use AdFox\Campaigns\Traits\Restrictions\HasActiveEventsRestrictions;
 use AdFox\Campaigns\Traits\Restrictions\HasClicksRestrictions;
 use AdFox\Campaigns\Traits\Restrictions\HasDateRestrictions;

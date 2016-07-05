@@ -3,7 +3,7 @@
 namespace AdFox\Campaigns\Banner;
 
 use AdFox\AdFox;
-use AdFox\Campaigns\BaseObject;
+use AdFox\BaseObject;
 
 class Type extends BaseObject{
 
