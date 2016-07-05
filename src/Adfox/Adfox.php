@@ -6,6 +6,7 @@ use AdFox\Campaigns\Banner\Banner;
 use AdFox\Campaigns\Banner\Type as BannerType;
 use AdFox\Campaigns\Campaign;
 use AdFox\Campaigns\Flight;
+use AdFox\Site\Site;
 
 /**
  * AdFox API wrapper class.
@@ -35,8 +36,9 @@ class AdFox {
 
 	const CODE_NO_ERROR = 0;
 	const CODE_AUTH_ERROR = -1;
+	const CODE_PARAM_INCORRECT = -6;
 	const CODE_PARAM_MISSING = -7;
-	const CODE_PARAM_IS_EMPTY = -9;
+	const CODE_PARAM_EMPTY = -9;
 	const CODE_API_CALL_ERROR = 60;
 
 	const OBJECT_ACCOUNT = 'account';
@@ -45,14 +47,19 @@ class AdFox {
 	const OBJECT_BANNER = 'banner';
 	const OBJECT_BANNER_TYPE = 'bannerType';
 	const OBJECT_BANNER_TEMPLATE = 'template';
+	const OBJECT_SITE = 'website';
+	const OBJECT_PLACE = 'place';
 
 	const ACTION_LIST = 'list';
 	const ACTION_ADD = 'add';
 	const ACTION_MODIFY = 'modify';
+	const ACTION_PLACE = 'placing';
 
 	const OBJECT_STATUS_ACTIVE = 0;
 	const OBJECT_STATUS_PAUSED = 1;
 	const OBJECT_STATUS_COMPLETED = 2;
+
+	const DATE_FORMAT = 'Y-m-d H:i';
 
 	/**
 	 * AdFox constructor.
@@ -123,7 +130,7 @@ class AdFox {
 		{
 			$message = (string) $response->status->error;
 
-			if (in_array($response->status->code, [self::CODE_PARAM_MISSING, self::CODE_PARAM_IS_EMPTY]))
+			if (in_array($response->status->code, [self::CODE_PARAM_MISSING, self::CODE_PARAM_EMPTY, self::CODE_PARAM_INCORRECT]))
 			{
 				$message .= ': ' . (string) $response->status->parameter;
 			}
@@ -226,6 +233,48 @@ class AdFox {
 			}
 		}
 		
+		return false;
+	}
+
+	/**
+	 * Find BannerType by id
+	 *
+	 * @param $id
+	 * @param array $relations
+	 * @return Site|null
+	 */
+	public function findSite($id, $relations = [])
+	{
+		if ($attributes = $this->findObject(self::OBJECT_SITE, $id))
+		{
+			return Site::createFromResponse($this, $attributes, $relations);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Find BannerType by id
+	 *
+	 * @param $name
+	 * @param array $relations
+	 * @return Site|null
+	 */
+	public function findSiteByName($name, $relations = [])
+	{
+		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_LIST, self::OBJECT_SITE, ['limit' => 1000]);
+
+		if (!empty($response->data))
+		{
+			foreach ($response->data->children() as $site)
+			{
+				if ((string) $site->name == $name)
+				{
+					return Site::createFromResponse($this, (array) $site, $relations);
+				}
+			}
+		}
+
 		return false;
 	}
 

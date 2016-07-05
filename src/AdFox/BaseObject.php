@@ -6,9 +6,7 @@
  * Time: 14:07
  */
 
-namespace AdFox\Campaigns;
-
-use AdFox\AdFox;
+namespace AdFox;
 
 abstract class BaseObject {
 
@@ -32,6 +30,13 @@ abstract class BaseObject {
 	 * @var array
 	 */
 	protected $attributes = [];
+
+	/**
+	 * Attributes that can be set to null
+	 *
+	 * @var array
+	 */
+	protected $nullable = [];
 
 	public function __construct(AdFox $adFox)
 	{
@@ -59,7 +64,7 @@ abstract class BaseObject {
 
 		foreach ($this->attributes as $property)
 		{
-			if (property_exists($this, $property) and !is_null($this->{$property}))
+			if (property_exists($this, $property) and (!is_null($this->{$property}) or in_array($property, $this->nullable)))
 			{
 				$array[$property] = $this->{$property};
 			}

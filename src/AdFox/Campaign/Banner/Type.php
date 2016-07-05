@@ -3,7 +3,7 @@
 namespace AdFox\Campaigns\Banner;
 
 use AdFox\AdFox;
-use AdFox\Campaigns\BaseObject;
+use AdFox\BaseObject;
 
 class Type extends BaseObject{
 
@@ -58,6 +58,8 @@ class Type extends BaseObject{
 			$template = new Template($this->adfox, (array) $templatetData);
 			$this->templates[] = $template;
 		}
+
+		return $this;
 	}
 
 	/**

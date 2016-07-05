@@ -2,6 +2,7 @@
 
 ## Supported Features
 * Create flight/campaign
+* Placing flights on place or site
 * Set impressions/clicks/events restrictions
 * Change flight/campaign status and level
 * Create/Editing banners
@@ -64,4 +65,33 @@ $flight->addBanner($banner);
 
 ```
 $banner = $adfox->findBanner(1724257)->setParam('user5', '55%')->save();
+```
+
+#### Placing flights on place or site
+```
+$adfox = new Adfox\Adfox('login', 'pass');
+
+$campaign = $adfox->createCampaign('Hills Branding', 212095);
+$flight = $campaign->createFlight('Hiils на КакПросто');
+
+$place = $adfox->findSiteByName('kakprosto.ru')->findPlaceByName('Брендирование (асинх.)');
+
+$flight->setLevel(3)
+	->setImpressionsLimits(50000, 1000, 100)
+	->setClicksLimits(1000)
+	->setStatus(\AdFox\AdFox::OBJECT_STATUS_PAUSED)
+	->setEndDate(strtotime('+1 week'))
+	->placeOnPlace($place)
+	->save();
+
+$template = $place->loadBannerType()->bannerType->findTemplate('BackGround WShifter // KP');
+
+$banner = \AdFox\Campaigns\Banner\Banner::make($adfox, 'Брендирование Hills', $template, [
+	'user1' => '#ccc',
+	'user2' => 'Ссылка на изображение',
+	'user11' => 'http://hills.ru',
+	'trackingUrl' => 'http://ad.adriver.ru/cgi-bin/rle.cgi?sid=1&bt=21&ad=591759&pid=2374609&bid=4536971&bn=4536971&rnd=%random%'
+]);
+
+$banner->addToFlight($flight);
 ```

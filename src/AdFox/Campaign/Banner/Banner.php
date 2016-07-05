@@ -3,9 +3,10 @@
 namespace AdFox\Campaigns\Banner;
 
 use AdFox\AdFox;
-use AdFox\Campaigns\BaseObject;
+use AdFox\BaseObject;
 use AdFox\Campaigns\Flight;
 use AdFox\Campaigns\Traits\Restrictions\HasClicksRestrictions;
+use AdFox\Campaigns\Traits\Restrictions\HasDateRestrictions;
 use AdFox\Campaigns\Traits\Restrictions\HasImpressionsRestrictions;
 use AdFox\Campaigns\Traits\HasStatus;
 
@@ -14,6 +15,7 @@ class Banner extends BaseObject{
 	use HasStatus;
 	use HasClicksRestrictions;
 	use HasImpressionsRestrictions;
+	use HasDateRestrictions;
 
 	/**
 	 * Banner name
@@ -39,7 +41,15 @@ class Banner extends BaseObject{
 		'maxImpressions', 'maxImpressionsPerDay', 'maxImpressionsPerHour',
 		'maxClicks', 'maxClicksPerDay', 'maxClicksPerHour',
 		'user1', 'user2', 'user3', 'user4', 'user5', 'user6', 'user7', 'user8', 'user9', 'user10', 'user11', 'user12',
+		'dateStart', 'dateEnd',
 	];
+
+	/**
+	 * Attributes that can be set to null
+	 *
+	 * @var array
+	 */
+	protected $nullable = ['dateEnd'];
 
 	/**
 	 * Banner params
@@ -73,6 +83,7 @@ class Banner extends BaseObject{
 		$banner->campaignID = $attributes['campaignID'];
 		$banner->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
 		$banner->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
+		$banner->setDateRestrictions($attributes['dateStart'], $attributes['dateEnd']);
 
 		foreach ($attributes as $attribute => $value)
 		{
@@ -184,6 +195,9 @@ class Banner extends BaseObject{
 		return $banner;
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function toArray()
 	{
 		return parent::toArray() + $this->getParams();

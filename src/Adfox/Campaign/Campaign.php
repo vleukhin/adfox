@@ -3,8 +3,10 @@
 namespace AdFox\Campaigns;
 
 use AdFox\AdFox;
+use AdFox\BaseObject;
 use AdFox\Campaigns\Traits\Restrictions\HasActiveEventsRestrictions;
 use AdFox\Campaigns\Traits\Restrictions\HasClicksRestrictions;
+use AdFox\Campaigns\Traits\Restrictions\HasDateRestrictions;
 use AdFox\Campaigns\Traits\Restrictions\HasImpressionsRestrictions;
 use AdFox\Campaigns\Traits\HasStatus;
 
@@ -14,6 +16,7 @@ class Campaign extends BaseObject{
 	use HasActiveEventsRestrictions;
 	use HasClicksRestrictions;
 	use HasImpressionsRestrictions;
+	use HasDateRestrictions;
 
 	/**
 	 * Attributes that can be modified
@@ -25,7 +28,15 @@ class Campaign extends BaseObject{
 		'maxImpressions', 'maxImpressionsPerDay', 'maxImpressionsPerHour',
 		'maxClicks', 'maxClicksPerDay', 'maxClicksPerHour',
 		'maxActiveEvents', 'maxActiveEventsPerDay', 'maxActiveEventsPerHour',
+		'dateStart', 'dateEnd',
 	];
+
+	/**
+	 * Attributes that can be set to null
+	 *
+	 * @var array
+	 */
+	protected $nullable = ['dateEnd'];
 
 	/**
 	 * Flights assigned to this campaign
@@ -83,16 +94,8 @@ class Campaign extends BaseObject{
 		{
 			$this->flights[] = new Flight($this->adfox, (array) $flightData);
 		}
-	}
 
-	/**
-	 * Set AdFox instance to send requests to
-	 *
-	 * @param AdFox $adFox
-	 */
-	public function setAdfox(AdFox $adFox)
-	{
-		$this->adfox = $adFox;
+		return $this;
 	}
 
 	/**

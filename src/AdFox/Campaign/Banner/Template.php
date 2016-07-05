@@ -10,7 +10,7 @@ namespace AdFox\Campaigns\Banner;
 
 
 use AdFox\AdFox;
-use AdFox\Campaigns\BaseObject;
+use AdFox\BaseObject;
 
 class Template extends BaseObject{
 
