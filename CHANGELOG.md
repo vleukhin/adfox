@@ -3,3 +3,6 @@
 * Create flight/campaign
 * Set impressions/clicks/events restrictions
 * Change flight/campaign status and level
+
+## v.0.2.0
+Basic banners operations added
