@@ -2,11 +2,20 @@
   "name": "vleukhin/adfox",
   "description": "AdFox API Lib",
   "minimum-stability": "stable",
+  "keywords": ["adfox", "advertisment"],
   "license": "proprietary",
   "authors": [
-    {
-      "name": "Viktor Leukhin",
-      "email": "vsleuhin@ya.ru"
+  {
+    "name": "Viktor Leukhin",
+    "email": "vsleuhin@ya.ru"
     }
-  ]
+  ],
+  "require": {
+    "php": ">=5.4"
+  },
+  "autoload": {
+    "psr-0": {
+      "AdFox": "src/"
+    }
+  }
 }
