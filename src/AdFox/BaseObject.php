@@ -8,6 +8,8 @@
 
 namespace AdFox;
 
+use AdFox\Campaign\Targeting\Contracts\Targeting;
+
 abstract class BaseObject {
 
 	/**
@@ -103,6 +105,21 @@ abstract class BaseObject {
 		}
 	}
 
+	/**
+	 * Apply targeting to this object
+	 *
+	 * @param Targeting $targeting
+	 * @throws AdfoxException
+	 *
+	 * @return $this
+	 */
+	public function applyTargeting(Targeting $targeting)
+	{
+		$params = ['objectID' => $this->id] + $targeting->getParams();
+		$this->adfox->callApi($this->getType(), AdFox::ACTION_TARGET, $targeting->getType(), $params);
+
+		return $this;
+	}
 
 	/**
 	 * Get Object type. String constant from AdFox class.

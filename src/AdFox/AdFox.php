@@ -49,11 +49,14 @@ class AdFox {
 	const OBJECT_BANNER_TEMPLATE = 'template';
 	const OBJECT_SITE = 'website';
 	const OBJECT_PLACE = 'place';
+	const OBJECT_TARGETING = 'targeting';
 
+	const ACTION_INFO = 'info';
 	const ACTION_LIST = 'list';
 	const ACTION_ADD = 'add';
 	const ACTION_MODIFY = 'modify';
 	const ACTION_PLACE = 'placing';
+	const ACTION_TARGET = 'target';
 
 	const OBJECT_STATUS_ACTIVE = 0;
 	const OBJECT_STATUS_PAUSED = 1;
