@@ -1,6 +1,6 @@
 <?php
 
-namespace AdFox\Campaigns\Traits\Restrictions;
+namespace AdFox\Campaign\Traits\Restrictions;
 
 use AdFox\AdFox;
 

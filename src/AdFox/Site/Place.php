@@ -4,7 +4,7 @@ namespace AdFox\Site;
 
 use AdFox\AdFox;
 use AdFox\BaseObject;
-use AdFox\Campaigns\Banner\Type as BannerType;
+use AdFox\Campaign\Banner\Type as BannerType;
 
 class Place extends BaseObject{
 

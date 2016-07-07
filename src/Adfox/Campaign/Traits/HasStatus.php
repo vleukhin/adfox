@@ -1,6 +1,6 @@
 <?php
 
-namespace AdFox\Campaigns\Traits;
+namespace AdFox\Campaign\Traits;
 
 use AdFox\AdFox;
 

@@ -1,14 +1,14 @@
 <?php
 
-namespace AdFox\Campaigns\Banner;
+namespace AdFox\Campaign\Banner;
 
 use AdFox\AdFox;
 use AdFox\BaseObject;
-use AdFox\Campaigns\Flight;
-use AdFox\Campaigns\Traits\Restrictions\HasClicksRestrictions;
-use AdFox\Campaigns\Traits\Restrictions\HasDateRestrictions;
-use AdFox\Campaigns\Traits\Restrictions\HasImpressionsRestrictions;
-use AdFox\Campaigns\Traits\HasStatus;
+use AdFox\Campaign\Flight;
+use AdFox\Campaign\Traits\Restrictions\HasClicksRestrictions;
+use AdFox\Campaign\Traits\Restrictions\HasDateRestrictions;
+use AdFox\Campaign\Traits\Restrictions\HasImpressionsRestrictions;
+use AdFox\Campaign\Traits\HasStatus;
 
 class Banner extends BaseObject{
 

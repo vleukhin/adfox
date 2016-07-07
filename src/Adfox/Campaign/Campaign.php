@@ -1,14 +1,14 @@
 <?php
 
-namespace AdFox\Campaigns;
+namespace AdFox\Campaign;
 
 use AdFox\AdFox;
 use AdFox\BaseObject;
-use AdFox\Campaigns\Traits\Restrictions\HasActiveEventsRestrictions;
-use AdFox\Campaigns\Traits\Restrictions\HasClicksRestrictions;
-use AdFox\Campaigns\Traits\Restrictions\HasDateRestrictions;
-use AdFox\Campaigns\Traits\Restrictions\HasImpressionsRestrictions;
-use AdFox\Campaigns\Traits\HasStatus;
+use AdFox\Campaign\Traits\Restrictions\HasActiveEventsRestrictions;
+use AdFox\Campaign\Traits\Restrictions\HasClicksRestrictions;
+use AdFox\Campaign\Traits\Restrictions\HasDateRestrictions;
+use AdFox\Campaign\Traits\Restrictions\HasImpressionsRestrictions;
+use AdFox\Campaign\Traits\HasStatus;
 
 class Campaign extends BaseObject{
 

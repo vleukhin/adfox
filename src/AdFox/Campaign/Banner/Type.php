@@ -1,6 +1,6 @@
 <?php
 
-namespace AdFox\Campaigns\Banner;
+namespace AdFox\Campaign\Banner;
 
 use AdFox\AdFox;
 use AdFox\BaseObject;

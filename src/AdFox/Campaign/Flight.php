@@ -6,17 +6,17 @@
  * Time: 13:30
  */
 
-namespace AdFox\Campaigns;
+namespace AdFox\Campaign;
 
 use AdFox\AdFox;
 use AdFox\BaseObject;
-use AdFox\Campaigns\Banner\Banner;
-use AdFox\Campaigns\Banner\Template;
-use AdFox\Campaigns\Traits\Restrictions\HasClicksRestrictions;
-use AdFox\Campaigns\Traits\Restrictions\HasDateRestrictions;
-use AdFox\Campaigns\Traits\Restrictions\HasImpressionsRestrictions;
-use AdFox\Campaigns\Traits\HasStatus;
-use AdFox\Campaigns\Traits\HasLevel;
+use AdFox\Campaign\Banner\Banner;
+use AdFox\Campaign\Banner\Template;
+use AdFox\Campaign\Traits\Restrictions\HasClicksRestrictions;
+use AdFox\Campaign\Traits\Restrictions\HasDateRestrictions;
+use AdFox\Campaign\Traits\Restrictions\HasImpressionsRestrictions;
+use AdFox\Campaign\Traits\HasStatus;
+use AdFox\Campaign\Traits\HasLevel;
 use AdFox\Site\Place;
 use AdFox\Site\Site;
 

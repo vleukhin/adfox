@@ -2,10 +2,10 @@
 
 namespace AdFox;
 
-use AdFox\Campaigns\Banner\Banner;
-use AdFox\Campaigns\Banner\Type as BannerType;
-use AdFox\Campaigns\Campaign;
-use AdFox\Campaigns\Flight;
+use AdFox\Campaign\Banner\Banner;
+use AdFox\Campaign\Banner\Type as BannerType;
+use AdFox\Campaign\Campaign;
+use AdFox\Campaign\Flight;
 use AdFox\Site\Site;
 
 /**
@@ -153,7 +153,6 @@ class AdFox {
 		if ($attributes = $this->findObject(self::OBJECT_CAMPAIGN, $id))
 		{
 			return new Campaign($this, (array) $attributes, $relations);
-
 		}
 
 		return null;

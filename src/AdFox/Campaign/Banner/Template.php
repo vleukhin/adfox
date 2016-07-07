@@ -6,7 +6,7 @@
  * Time: 18:27
  */
 
-namespace AdFox\Campaigns\Banner;
+namespace AdFox\Campaign\Banner;
 
 
 use AdFox\AdFox;
