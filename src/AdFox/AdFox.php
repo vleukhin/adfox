@@ -50,6 +50,7 @@ class AdFox {
 	const OBJECT_SITE = 'website';
 	const OBJECT_PLACE = 'place';
 	const OBJECT_TARGETING = 'targeting';
+	const OBJECT_USERCRITERIA = 'userCriteria';
 
 	const ACTION_INFO = 'info';
 	const ACTION_LIST = 'list';
@@ -236,6 +237,29 @@ class AdFox {
 		}
 		
 		return false;
+	}
+
+	/**
+	 * Make call to API and passes list results through given callback
+	 *
+	 * @param $callback
+	 * @param $object
+	 * @param $action
+	 * @param null $actionObject
+	 * @param array $parameters
+	 * @throws AdfoxException
+	 */
+	public function callApiCallbackLoop($callback, $object, $action, $actionObject = null, $parameters = [])
+	{
+		$response = $this->callApi($object, $action, $actionObject, $parameters);
+
+		if (!empty($response->data))
+		{
+			foreach ($response->data->children() as $children)
+			{
+				$callback((array) $children);
+			}
+		}
 	}
 
 	/**
