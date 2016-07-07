@@ -20,6 +20,7 @@ class TargetingTime implements Targeting{
 	const DAY_SUNDAY = 7;
 
 	const MONTH_DAYS = 31;
+	const DAY_HOURS = 24;
 
 	/**
 	 * Impressions per day limits
@@ -85,17 +86,113 @@ class TargetingTime implements Targeting{
 	 */
 	public function setImpressions($count, $day = null)
 	{
+		return $this->_setImpressions('impressions', $count, $day);
+	}
+
+	/**
+	 * Set impressions per hour limit for a day or for all days of week
+	 *
+	 * @param int $count
+	 * @param int $day
+	 *
+	 * @return $this
+	 */
+	public function setImpressionsPerHour($count, $day = null)
+	{
+		return $this->_setImpressions('impressionsPerHour', $count, $day);
+	}
+
+	/**
+	 * Set impressions limit for a day or for all days of week
+	 *
+	 * @param $type
+	 * @param $count
+	 * @param $day
+	 *
+	 * @return $this
+	 */
+	protected function _setImpressions($type, $count, $day)
+	{
 		$days = $this->getWeekDays();
 
 		if (in_array($day, $days))
 		{
-			$this->impressions[$day] = $count;
+			$this->{$type}[$day] = $count;
 		}
 		elseif(is_null($day))
 		{
 			foreach ($days as $day)
 			{
-				$this->impressions[$day] = $count;
+				$this->{$type}[$day] = $count;
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Set use client time or not
+	 *
+	 * @param bool $isClientTime
+	 *
+	 * @return $this
+	 */
+	public function setIsClientTime($isClientTime)
+	{
+		$this->isClientTime = $isClientTime;
+
+		return $this;
+	}
+
+	/**
+	 * Enable or disable impressions in given hours at given days
+	 *
+	 * @param array $hours
+	 * @param array $days
+	 * @return TargetingTime
+	 */
+	public function enableHours($hours = [], $days = [])
+	{
+		return $this->setHours(true, $hours, $days);
+	}
+
+	/**
+	 * Enable or disable impressions in given hours at given days
+	 *
+	 * @param array $hours
+	 * @param array $days
+	 * @return TargetingTime
+	 */
+	public function disableHours($hours = [], $days = [])
+	{
+		return $this->setHours(false, $hours, $days);
+	}
+
+	/**
+	 * Enable or disable impressions in given hours at given days
+	 *
+	 * @param $enabled
+	 * @param $hours
+	 * @param $days
+	 * @return $this
+	 */
+	protected function setHours($enabled, $hours, $days)
+	{
+		if (!is_array($hours) or empty($hours))
+		{
+			$hours = range(1, self::DAY_HOURS);
+		}
+
+		if (!is_array($days) or empty($days))
+		{
+			$days = $this->getWeekDays();
+		}
+
+		foreach ($days as $day)
+		{
+			foreach ($hours as $hour)
+			{
+				$this->hours[$day][$hour] = $enabled;
 			}
 		}
 
@@ -116,21 +213,14 @@ class TargetingTime implements Targeting{
 
 		foreach ($days as $day)
 		{
-			if (isset($this->impressions[$day]))
-			{
-				$params['impressionsPer' . $day] = $this->impressions[$day];
-			}
-
-			if (isset($this->impressionsPerHour[$day]))
-			{
-				$params['impressionsPerHour' . $day] = $this->impressionsPerHour[$day];
-			}
+			$params['impressionsPer' . $day] = isset($this->impressions[$day]) ? $this->impressions[$day] : 0;
+			$params['impressionsPerHour' . $day] = isset($this->impressionsPerHour[$day]) ? $this->impressionsPerHour[$day] : 0;
 
 			for ($hour = 1; $hour <= self::MONTH_DAYS; $hour++)
 			{
 				if (isset($this->hours[$day][$hour]))
 				{
-					$params['day' . $day . 'hour' . $hour] = $this->hours[$day][$hour];
+					$params['hour' . $hour . 'day' . $day] = (int) $this->hours[$day][$hour];
 				}
 			}
 		}
