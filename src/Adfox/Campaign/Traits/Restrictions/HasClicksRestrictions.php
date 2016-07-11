@@ -86,4 +86,14 @@ trait HasClicksRestrictions {
 	{
 		return $this->maxClicksPerHour;
 	}
+
+	/**
+	 * Returns this trait attributes
+	 *
+	 * @return array
+	 */
+	public static function getHasClicksRestrictionsAttributes()
+	{
+		return ['maxClicks', 'maxClicksPerDay', 'maxClicksPerHour'];
+	}
 }

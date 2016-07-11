@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vleukhin
- * Date: 04.07.2016
- * Time: 14:07
- */
 
 namespace AdFox;
 
@@ -34,12 +28,10 @@ abstract class BaseObject {
 	protected $attributes = [];
 
 	/**
-	 * Attributes that can be set to null
+	 * BaseObject constructor.
 	 *
-	 * @var array
+	 * @param AdFox $adFox
 	 */
-	protected $nullable = [];
-
 	public function __construct(AdFox $adFox)
 	{
 		$this->adfox = $adFox;
@@ -62,11 +54,18 @@ abstract class BaseObject {
 	 */
 	public function toArray()
 	{
+		$attributes = $this->attributes;
+		
+		foreach (class_uses(static::class) as $trait)
+		{
+			$attributes = array_merge($attributes, call_user_func([$trait, 'get' . basename($trait) . 'Attributes']));
+		}
+		
 		$array = [];
 
-		foreach ($this->attributes as $property)
+		foreach ($attributes as $property)
 		{
-			if (property_exists($this, $property) and (!is_null($this->{$property}) or in_array($property, $this->nullable)))
+			if (property_exists($this, $property))
 			{
 				$array[$property] = $this->{$property};
 			}

@@ -59,4 +59,14 @@ trait HasStatus {
 		return $this;
 	}
 
+	/**
+	 * Returns this trait attributes
+	 *
+	 * @return array
+	 */
+	public static function getHasStatusAttributes()
+	{
+		return ['status'];
+	}
+
 }

@@ -89,4 +89,14 @@ trait HasDateRestrictions {
 		return $this;
 	}
 
+	/**
+	 * Returns this trait attributes
+	 *
+	 * @return array
+	 */
+	public static function getHasDateRestrictionsAttributes()
+	{
+		return ['dateStart', 'dateEnd'];
+	}
+
 }

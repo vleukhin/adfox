@@ -87,4 +87,14 @@ trait HasActiveEventsRestrictions {
 		return $this->maxActiveEventsPerHour;
 	}
 
+	/**
+	 * Returns this trait attributes
+	 * 
+	 * @return array
+	 */
+	public static function getHasActiveEventsRestrictionsAttributes()
+	{
+		return ['maxActiveEvents', 'maxActiveEventsPerDay', 'maxActiveEventsPerHour'];
+	}
+
 }

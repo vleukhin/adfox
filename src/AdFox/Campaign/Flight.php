@@ -50,19 +50,7 @@ class Flight extends BaseObject{
 	 *
 	 * @var array
 	 */
-	protected $attributes = [
-		'id', 'status', 'name', 'level', 'superCampaignId',
-		'maxImpressions', 'maxImpressionsPerDay', 'maxImpressionsPerHour',
-		'maxClicks', 'maxClicksPerDay', 'maxClicksPerHour',
-		'dateStart', 'dateEnd',
-	];
-
-	/**
-	 * Attributes that can be set to null
-	 *
-	 * @var array
-	 */
-	protected $nullable = ['dateEnd'];
+	protected $attributes = ['id', 'name', 'superCampaignId'];
 
 	/**
 	 * Campaign this filght is assign to
@@ -89,6 +77,7 @@ class Flight extends BaseObject{
 		$this->superCampaignID = $attributes['superCampaignID'];
 		$this->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
 		$this->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
+		$this->setDateRestrictions($attributes['dateStart'], $attributes['dateEnd']);
 		
 		$this->loadRelations($relations);
 	}

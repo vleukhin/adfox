@@ -36,20 +36,7 @@ class Banner extends BaseObject{
 	 *
 	 * @var array
 	 */
-	protected $attributes = [
-		'id', 'name', 'status', 'campaignId',
-		'maxImpressions', 'maxImpressionsPerDay', 'maxImpressionsPerHour',
-		'maxClicks', 'maxClicksPerDay', 'maxClicksPerHour',
-		'user1', 'user2', 'user3', 'user4', 'user5', 'user6', 'user7', 'user8', 'user9', 'user10', 'user11', 'user12',
-		'dateStart', 'dateEnd',
-	];
-
-	/**
-	 * Attributes that can be set to null
-	 *
-	 * @var array
-	 */
-	protected $nullable = ['dateEnd'];
+	protected $attributes = ['id', 'name', 'campaignId'];
 
 	/**
 	 * Banner params

@@ -86,4 +86,14 @@ trait HasImpressionsRestrictions {
 	{
 		return $this->maxImpressionsPerHour;
 	}
+
+	/**
+	 * Returns this trait attributes
+	 *
+	 * @return array
+	 */
+	public static function getHasImpressionsRestrictionsAttributes()
+	{
+		return ['maxImpressions', 'maxImpressionsPerDay', 'maxImpressionsPerHour'];
+	}
 }

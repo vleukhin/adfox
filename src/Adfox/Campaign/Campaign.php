@@ -30,20 +30,7 @@ class Campaign extends BaseObject{
 	 *
 	 * @var array
 	 */
-	protected $attributes = [
-		'id', 'status', 'name',
-		'maxImpressions', 'maxImpressionsPerDay', 'maxImpressionsPerHour',
-		'maxClicks', 'maxClicksPerDay', 'maxClicksPerHour',
-		'maxActiveEvents', 'maxActiveEventsPerDay', 'maxActiveEventsPerHour',
-		'dateStart', 'dateEnd',
-	];
-
-	/**
-	 * Attributes that can be set to null
-	 *
-	 * @var array
-	 */
-	protected $nullable = ['dateEnd'];
+	protected $attributes = ['id', 'name'];
 
 	/**
 	 * Flights assigned to this campaign
@@ -69,6 +56,7 @@ class Campaign extends BaseObject{
 		$this->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
 		$this->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
 		$this->setActiveEventsLimits($attributes['maxActiveEvents'], $attributes['maxActiveEventsPerDay'], $attributes['maxActiveEventsPerHour']);
+		$this->setDateRestrictions($attributes['dateStart'], $attributes['dateEnd']);
 
 		$this->loadRelations($relations);
 	}

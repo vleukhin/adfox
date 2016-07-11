@@ -36,4 +36,14 @@ trait HasLevel {
 
 		return $this;
 	}
+
+	/**
+	 * Returns this trait attributes
+	 *
+	 * @return array
+	 */
+	public static function getHasLevelAttributes()
+	{
+		return ['level'];
+	}
 }
