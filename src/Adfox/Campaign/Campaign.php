@@ -105,4 +105,14 @@ class Campaign extends BaseObject{
 	{
 		return AdFox::OBJECT_CAMPAIGN;
 	}
+
+	/**
+	 * Get URL of this campaign
+	 *
+	 * @return string
+	 */
+	protected function getUrl()
+	{
+		return $this->adfox->baseUrl . 'campaigns.php?superCampaignID=' . $this->id;
+	}
 }

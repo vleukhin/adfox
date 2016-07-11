@@ -192,6 +192,7 @@ class Flight extends BaseObject{
 	/**
 	 * Place/Remove this flight object on/from given placable object
 	 *
+	 * @param $type
 	 * @param int $objectId
 	 * @param bool $remove remove flag, default is false
 	 * @throws \AdFox\AdfoxException
@@ -226,5 +227,15 @@ class Flight extends BaseObject{
 		}
 
 		return $array;
+	}
+
+	/**
+	 * Get URL of this flight
+	 *
+	 * @return string
+	 */
+	public function getUrl()
+	{
+		return $this->adfox->baseUrl . 'banners.php?campaignID=' . $this->id;
 	}
 }

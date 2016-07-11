@@ -127,4 +127,11 @@ abstract class BaseObject {
 	 * @return string
 	 */
 	abstract protected function getType();
+
+	/**
+	 * Get URL of this object
+	 *
+	 * @return string
+	 */
+	abstract protected function getUrl();
 }

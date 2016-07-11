@@ -95,4 +95,14 @@ class Type extends BaseObject{
 	{
 		return AdFox::OBJECT_BANNER_TYPE;
 	}
+
+	/**
+	 * Get URL of this type
+	 *
+	 * @return string
+	 */
+	protected function getUrl()
+	{
+		return $this->adfox->baseUrl . 'templates.php?bannerTypeID=' . $this->id;
+	}
 }

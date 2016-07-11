@@ -210,4 +210,14 @@ class Banner extends BaseObject{
 	{
 		return AdFox::OBJECT_BANNER;
 	}
+
+	/**
+	 * Get URL of this banner
+	 *
+	 * @return string
+	 */
+	public function getUrl()
+	{
+		return $this->adfox->baseUrl . 'modifyBannerForm.php?bannerID=' . $this->id;
+	}
 }

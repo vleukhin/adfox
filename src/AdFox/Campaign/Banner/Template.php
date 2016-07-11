@@ -61,4 +61,14 @@ class Template extends BaseObject{
 	{
 		return AdFox::OBJECT_BANNER_TEMPLATE;
 	}
+
+	/**
+	 * Get URL of this object
+	 *
+	 * @return string
+	 */
+	protected function getUrl()
+	{
+		return $this->adfox->baseUrl . 'modifyTemplateForm.php?templateID=' . $this->id;
+	}
 }

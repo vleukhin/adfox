@@ -96,4 +96,14 @@ class Site extends BaseObject{
 	{
 		return \AdFox\AdFox::OBJECT_SITE;
 	}
+
+	/**
+	 * Get URL of this site
+	 *
+	 * @return string
+	 */
+	protected function getUrl()
+	{
+		return $this->adfox->baseUrl . 'sections.php?navigationTab=websites&websiteID=' . $this->id;
+	}
 }

@@ -80,4 +80,14 @@ class Place extends BaseObject{
 	{
 		return AdFox::OBJECT_PLACE;
 	}
+
+	/**
+	 * Get URL of this object
+	 *
+	 * @return string
+	 */
+	protected function getUrl()
+	{
+		return $this->adfox->baseUrl . 'placeSummaryCampaignsPlacedForm.php?navigationTab=websites&placeID=' . $this->id;
+	}
 }
