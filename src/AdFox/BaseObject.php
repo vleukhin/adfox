@@ -95,6 +95,7 @@ abstract class BaseObject {
 	 */
 	protected function loadRelations($relations)
 	{
+		$relations = (array) $relations;
 		foreach ($relations as $relation)
 		{
 			$method = 'load'.ucfirst($relation);

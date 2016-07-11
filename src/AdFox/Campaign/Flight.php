@@ -39,12 +39,19 @@ class Flight extends BaseObject{
 	protected $superCampaignID;
 
 	/**
+	 * Flight name
+	 *
+	 * @var string
+	 */
+	public $name;
+
+	/**
 	 * Attributes that can be modified
 	 *
 	 * @var array
 	 */
 	protected $attributes = [
-		'id', 'status', 'level', 'superCampaignId',
+		'id', 'status', 'name', 'level', 'superCampaignId',
 		'maxImpressions', 'maxImpressionsPerDay', 'maxImpressionsPerHour',
 		'maxClicks', 'maxClicksPerDay', 'maxClicksPerHour',
 		'dateStart', 'dateEnd',
@@ -76,6 +83,7 @@ class Flight extends BaseObject{
 		parent::__construct($adfox);
 		
 		$this->id = $attributes['ID'];
+		$this->name = $attributes['name'];
 		$this->status = $attributes['status'];
 		$this->level = $attributes['level'];
 		$this->superCampaignID = $attributes['superCampaignID'];

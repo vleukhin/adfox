@@ -19,12 +19,19 @@ class Campaign extends BaseObject{
 	use HasDateRestrictions;
 
 	/**
+	 * Campaign name
+	 *
+	 * @var string
+	 */
+	public $name;
+
+	/**
 	 * Attributes that can be modified
 	 *
 	 * @var array
 	 */
 	protected $attributes = [
-		'id', 'status',
+		'id', 'status', 'name',
 		'maxImpressions', 'maxImpressionsPerDay', 'maxImpressionsPerHour',
 		'maxClicks', 'maxClicksPerDay', 'maxClicksPerHour',
 		'maxActiveEvents', 'maxActiveEventsPerDay', 'maxActiveEventsPerHour',
@@ -57,6 +64,7 @@ class Campaign extends BaseObject{
 		parent::__construct($adfox);
 
 		$this->id = $attributes['ID'];
+		$this->name = $attributes['name'];
 		$this->status = $attributes['status'];
 		$this->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
 		$this->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
