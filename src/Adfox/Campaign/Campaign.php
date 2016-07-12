@@ -17,49 +17,13 @@ class Campaign extends BaseObject{
 	use HasClicksRestrictions;
 	use HasImpressionsRestrictions;
 	use HasDateRestrictions;
-
-	/**
-	 * Campaign name
-	 *
-	 * @var string
-	 */
-	public $name;
-
-	/**
-	 * Attributes that can be modified
-	 *
-	 * @var array
-	 */
-	protected $attributes = ['id', 'name'];
-
+	
 	/**
 	 * Flights assigned to this campaign
 	 *
 	 * @var Flight[]
 	 */
 	public $flights = [];
-
-	/**
-	 * SuperCampaign constructor.
-	 *
-	 * @param AdFox $adfox
-	 * @param array $attributes
-	 * @param array $relations
-	 */
-	public function __construct(AdFox $adfox, $attributes, $relations = [])
-	{
-		parent::__construct($adfox);
-
-		$this->id = $attributes['ID'];
-		$this->name = $attributes['name'];
-		$this->status = $attributes['status'];
-		$this->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
-		$this->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
-		$this->setActiveEventsLimits($attributes['maxActiveEvents'], $attributes['maxActiveEventsPerDay'], $attributes['maxActiveEventsPerHour']);
-		$this->setDateRestrictions($attributes['dateStart'], $attributes['dateEnd']);
-
-		$this->loadRelations($relations);
-	}
 
 	/**
 	 * Creates flight

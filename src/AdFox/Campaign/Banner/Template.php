@@ -13,28 +13,7 @@ use AdFox\AdFox;
 use AdFox\BaseObject;
 
 class Template extends BaseObject{
-
-	/**
-	 * Banner type of this template
-	 *
-	 * @var Type
-	 */
-	public $bannerType;
-
-	/**
-	 * Template name
-	 *
-	 * @var string
-	 */
-	public $name;
-
-	/**
-	 * Attributes that can be modified
-	 *
-	 * @var array
-	 */
-	protected $attributes = ['id', 'name'];
-
+	
 	/**
 	 * Banner template constructor.
 	 *
@@ -44,12 +23,10 @@ class Template extends BaseObject{
 	 */
 	public function __construct(AdFox $adFox, $attributes, $relations = [])
 	{
-		parent::__construct($adFox);
+		$attributes['ID'] = $attributes['templateID'];
+		$attributes['name'] = $attributes['templateName'];
 
-		$this->id = $attributes['templateID'];
-		$this->name = $attributes['templateName'];
-
-		$this->loadRelations($relations);
+		parent::__construct($adFox, $attributes, $relations);
 	}
 
 	/**

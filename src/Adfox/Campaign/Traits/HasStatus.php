@@ -69,4 +69,14 @@ trait HasStatus {
 		return ['status'];
 	}
 
+	/**
+	 * Sets this trait attributes
+	 *
+	 * @param $instatce
+	 * @param $attributes
+	 */
+	public static function setHasStatusAttributes($instatce, $attributes)
+	{
+		$instatce->setStatus($attributes['status']);
+	}
 }

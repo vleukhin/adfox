@@ -96,4 +96,15 @@ trait HasImpressionsRestrictions {
 	{
 		return ['maxImpressions', 'maxImpressionsPerDay', 'maxImpressionsPerHour'];
 	}
+
+	/**
+	 * Sets this trait attributes
+	 *
+	 * @param $instatce
+	 * @param $attributes
+	 */
+	public static function setHasImpressionsRestrictionsAttributes($instatce, $attributes)
+	{
+		$instatce->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
+	}
 }

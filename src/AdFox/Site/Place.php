@@ -8,14 +8,12 @@ use AdFox\Campaign\Banner\Type as BannerType;
 
 class Place extends BaseObject{
 
-	public $name;
-
 	/**
 	 * Id of the banner type located in this place
 	 *
 	 * @var int
 	 */
-	protected $bannerTypeID;
+	public $bannerTypeID;
 
 	/**
 	 * Type of the banners located in this place
@@ -29,7 +27,7 @@ class Place extends BaseObject{
 	 *
 	 * @var int
 	 */
-	protected $siteID;
+	public $siteID;
 
 	/**
 	 * Site this place is assign to
@@ -37,6 +35,8 @@ class Place extends BaseObject{
 	 * @var Site
 	 */
 	public $site;
+
+	protected $attributes = ['id', 'name', 'siteID', 'bannerTypeID'];
 
 	/**
 	 * Place constructor
@@ -49,14 +49,9 @@ class Place extends BaseObject{
 	 */
 	public static function createFromResponse(AdFox $adfox, $attributes, $relations = [])
 	{
-		$place = new self($adfox);
-
-		$place->id = $attributes['ID'];
-		$place->name = $attributes['name'];
+		$place = new static($adfox, $attributes, $relations);
 		$place->siteID = $attributes['siteID'];
 		$place->bannerTypeID = $attributes['bannerTypeID'];
-
-		$place->loadRelations($relations);
 
 		return $place;
 	}

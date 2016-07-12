@@ -280,7 +280,7 @@ class AdFox {
 	{
 		if ($attributes = $this->findObject(self::OBJECT_SITE, $id))
 		{
-			return Site::createFromResponse($this, $attributes, $relations);
+			return  new Site($this, $attributes, $relations);
 		}
 
 		return null;
@@ -303,7 +303,7 @@ class AdFox {
 			{
 				if ((string) $site->name == $name)
 				{
-					return Site::createFromResponse($this, (array) $site, $relations);
+					return new Site($this, (array) $site, $relations);
 				}
 			}
 		}

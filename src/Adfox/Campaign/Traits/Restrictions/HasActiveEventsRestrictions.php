@@ -97,4 +97,15 @@ trait HasActiveEventsRestrictions {
 		return ['maxActiveEvents', 'maxActiveEventsPerDay', 'maxActiveEventsPerHour'];
 	}
 
+	/**
+	 * Sets this trait attributes
+	 *
+	 * @param $instatce
+	 * @param $attributes
+	 */
+	public static function setHasActiveEventsRestrictionsAttributes($instatce, $attributes)
+	{
+		$instatce->setActiveEventsLimits($attributes['maxActiveEvents'], $attributes['maxActiveEventsPerDay'], $attributes['maxActiveEventsPerHour']);
+	}
+
 }

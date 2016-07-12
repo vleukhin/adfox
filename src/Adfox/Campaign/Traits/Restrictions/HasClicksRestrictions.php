@@ -96,4 +96,15 @@ trait HasClicksRestrictions {
 	{
 		return ['maxClicks', 'maxClicksPerDay', 'maxClicksPerHour'];
 	}
+
+	/**
+	 * Sets this trait attributes
+	 *
+	 * @param $instatce
+	 * @param $attributes
+	 */
+	public static function setHasClicksRestrictionsAttributes($instatce, $attributes)
+	{
+		$instatce->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
+	}
 }

@@ -99,4 +99,15 @@ trait HasDateRestrictions {
 		return ['dateStart', 'dateEnd'];
 	}
 
+	/**
+	 * Sets this trait attributes
+	 *
+	 * @param $instatce
+	 * @param $attributes
+	 */
+	public static function setHasDateRestrictionsAttributes($instatce, $attributes)
+	{
+		$instatce->setDateRestrictions($attributes['dateStart'], $attributes['dateEnd']);
+	}
+
 }

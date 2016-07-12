@@ -46,4 +46,15 @@ trait HasLevel {
 	{
 		return ['level'];
 	}
+
+	/**
+	 * Sets this trait attributes
+	 *
+	 * @param $instatce
+	 * @param $attributes
+	 */
+	public static function setHasLevelAttributes($instatce, $attributes)
+	{
+		$instatce->setLevel($attributes['level']);
+	}
 }

@@ -14,6 +14,13 @@ abstract class BaseObject {
 	public $id = null;
 
 	/**
+	 * Object name
+	 *
+	 * @var string
+	 */
+	public $name;
+
+	/**
 	 * Adfox lib instance
 	 *
 	 * @var AdFox
@@ -25,16 +32,27 @@ abstract class BaseObject {
 	 *
 	 * @var array
 	 */
-	protected $attributes = [];
+	protected $attributes = ['id', 'name'];
 
 	/**
 	 * BaseObject constructor.
 	 *
 	 * @param AdFox $adFox
+	 * @param array $attributes
+	 * @param array $relations
 	 */
-	public function __construct(AdFox $adFox)
+	public function __construct(AdFox $adFox, $attributes = [], $relations = [])
 	{
-		$this->adfox = $adFox;
+		$this->setAdfox($adFox);
+		$this->id = $attributes['ID'];
+		$this->name = $attributes['name'];
+
+		foreach (class_uses(static::class) as $trait)
+		{
+			call_user_func_array([$trait, 'set' . basename($trait) . 'Attributes'], [$this, $attributes]);
+		}
+
+		$this->loadRelations($relations);
 	}
 
 	/**

@@ -18,13 +18,6 @@ class Banner extends BaseObject{
 	use HasDateRestrictions;
 
 	/**
-	 * Banner name
-	 *
-	 * @var string
-	 */
-	public $name;
-
-	/**
 	 * Banner template
 	 *
 	 * @var Template
@@ -63,14 +56,8 @@ class Banner extends BaseObject{
 	 */
 	public static function createFromResponse(AdFox $adfox, $attributes, $relations = [])
 	{
-		$banner = new self($adfox);
-
-		$banner->id = $attributes['ID'];
-		$banner->status = $attributes['status'];
+		$banner = new static($adfox, $attributes, $relations);
 		$banner->campaignID = $attributes['campaignID'];
-		$banner->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
-		$banner->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
-		$banner->setDateRestrictions($attributes['dateStart'], $attributes['dateEnd']);
 
 		foreach ($attributes as $attribute => $value)
 		{
@@ -79,8 +66,6 @@ class Banner extends BaseObject{
 				$banner->setParam('user' . $matches[1], (string) $value);
 			}
 		}
-
-		$banner->loadRelations($relations);
 
 		return $banner;
 	}
