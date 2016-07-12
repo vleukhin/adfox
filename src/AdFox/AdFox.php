@@ -136,6 +136,7 @@ class AdFox {
 			'object' => $object,
 			'action' => $action,
 			'actionObject' => $actionObject,
+			'encoding' => 'UTF-8',
 		];
 
 		$request += $parameters;
