@@ -17,6 +17,7 @@ use AdFox\Campaign\Traits\Restrictions\HasDateRestrictions;
 use AdFox\Campaign\Traits\Restrictions\HasImpressionsRestrictions;
 use AdFox\Campaign\Traits\HasStatus;
 use AdFox\Campaign\Traits\HasLevel;
+use AdFox\Campaign\Traits\Restrictions\HasImpressionsSmooth;
 use AdFox\Site\Place;
 use AdFox\Site\Site;
 
@@ -27,6 +28,7 @@ class Flight extends BaseObject{
 	use HasClicksRestrictions;
 	use HasImpressionsRestrictions;
 	use HasDateRestrictions;
+	use HasImpressionsSmooth;
 
 	const ROTATION_PRIORY = 0;
 	const ROTATION_PRECENT = 1;
@@ -193,21 +195,6 @@ class Flight extends BaseObject{
 	protected function getType()
 	{
 		return AdFox::OBJECT_FLIGHT;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function toArray()
-	{
-		$array = parent::toArray();
-
-		if (!is_null($this->campaign))
-		{
-			$array['campaign'] = $this->campaign->toArray();
-		}
-
-		return $array;
 	}
 
 	/**

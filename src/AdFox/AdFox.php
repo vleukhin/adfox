@@ -7,6 +7,7 @@ use AdFox\Campaign\Banner\Type as BannerType;
 use AdFox\Campaign\Campaign;
 use AdFox\Campaign\Flight;
 use AdFox\Site\Site;
+use ReflectionClass;
 
 /**
  * AdFox API wrapper class.
@@ -41,6 +42,9 @@ class AdFox {
 	 */
 	protected $password = null;
 
+	/**
+	 * API response codes
+	 */
 	const CODE_NO_ERROR = 0;
 	const CODE_AUTH_ERROR = -1;
 	const CODE_PARAM_INCORRECT = -6;
@@ -48,6 +52,9 @@ class AdFox {
 	const CODE_PARAM_EMPTY = -9;
 	const CODE_API_CALL_ERROR = 60;
 
+	/**
+	 * API objects
+	 */
 	const OBJECT_ACCOUNT = 'account';
 	const OBJECT_CAMPAIGN = 'superCampaign';
 	const OBJECT_FLIGHT = 'campaign';
@@ -59,6 +66,9 @@ class AdFox {
 	const OBJECT_TARGETING = 'targeting';
 	const OBJECT_USERCRITERIA = 'userCriteria';
 
+	/**
+	 * API actions
+	 */
 	const ACTION_INFO = 'info';
 	const ACTION_LIST = 'list';
 	const ACTION_ADD = 'add';
@@ -66,9 +76,20 @@ class AdFox {
 	const ACTION_PLACE = 'placing';
 	const ACTION_TARGET = 'target';
 
+	/**
+	 * Objects statuses
+	 */
 	const OBJECT_STATUS_ACTIVE = 0;
 	const OBJECT_STATUS_PAUSED = 1;
 	const OBJECT_STATUS_COMPLETED = 2;
+
+	/**
+	 * Impressions smooth types
+	 */
+	const IMP_SMOOTH_MAX = 0;
+	const IMP_SMOOTH_DAY_STEADY = 1;
+	const IMP_SMOOTH_ALL_STEADY = 2;
+	const IMP_SMOOTH_ALL_STEADY_AUTO = 3;
 
 	const DATE_FORMAT = 'Y-m-d H:i';
 
@@ -344,5 +365,31 @@ class AdFox {
 		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_ADD, self::OBJECT_CAMPAIGN, ['name' => $name, 'advertiserID' => $advertiserId]);
 
 		return $this->findCampaign($response->ID);
+	}
+
+	/**
+	 * Gets array of AdFox defined constants
+	 *
+	 * @param string $prefix filter by prefix
+	 *
+	 * @return array
+	 */
+	public static function get_constants($prefix = null)
+	{
+		$reflect = new ReflectionClass(static::class);
+		$constants =  $reflect->getConstants();
+
+		if (!is_null($prefix))
+		{
+			foreach ($constants as $name => $value)
+			{
+				if (strpos($name, $prefix) !== 0)
+				{
+					unset($constants[$name]);
+				}
+			}
+		}
+
+		return $constants;
 	}
 }
