@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vleukhin
- * Date: 04.07.2016
- * Time: 18:27
- */
 
 namespace AdFox\Campaign\Banner;
-
 
 use AdFox\AdFox;
 use AdFox\BaseObject;
