@@ -51,7 +51,7 @@ trait HasStatus {
 	 */
 	public function setStatus($status)
 	{
-		if (in_array($status, [AdFox::OBJECT_STATUS_ACTIVE, AdFox::OBJECT_STATUS_PAUSED, AdFox::OBJECT_STATUS_COMPLETED]))
+		if (in_array($status, AdFox::getConstants('OBJECT_STATUS')))
 		{
 			$this->status = $status;
 		}

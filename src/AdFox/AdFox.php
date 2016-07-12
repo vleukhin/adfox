@@ -374,7 +374,7 @@ class AdFox {
 	 *
 	 * @return array
 	 */
-	public static function get_constants($prefix = null)
+	public static function getConstants($prefix = null)
 	{
 		$reflect = new ReflectionClass(static::class);
 		$constants =  $reflect->getConstants();

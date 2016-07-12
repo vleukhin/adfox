@@ -21,7 +21,7 @@ trait HasImpressionsSmooth {
 	 */
 	public function setImpresssionsSmoothType($type)
 	{
-		if (in_array($type, AdFox::get_constants('IMP_SMOOTH')))
+		if (in_array($type, AdFox::getConstants('IMP_SMOOTH')))
 		{
 			$this->impressionsSmoothTypeID = $type;
 		}
