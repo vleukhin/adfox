@@ -55,7 +55,11 @@ trait HasClicksAndImpressionsSmooth {
 	{
 		if (in_array($typeId, AdFox::getConstants('SMOOTH')))
 		{
-			$this->{$type . 'SmoothTypeID'} = $typeId;
+			// Steady smooth can't be applied to object without end date
+			if (!(in_array($typeId, AdFox::getConstants('SMOOTH_STEADY')) and empty($this->dateEnd)))
+			{
+				$this->{$type . 'SmoothTypeID'} = $typeId;
+			}
 		}
 
 		return $this;
