@@ -1,6 +1,6 @@
 <?php
 
-namespace AdFox\Campaigns\Traits\Restrictions;
+namespace AdFox\Campaign\Traits\Restrictions;
 
 use AdFox\AdFox;
 
@@ -87,6 +87,27 @@ trait HasDateRestrictions {
 		$this->dateEnd = null;
 		
 		return $this;
+	}
+
+	/**
+	 * Returns this trait attributes
+	 *
+	 * @return array
+	 */
+	public static function getHasDateRestrictionsAttributes()
+	{
+		return ['dateStart', 'dateEnd'];
+	}
+
+	/**
+	 * Sets this trait attributes
+	 *
+	 * @param $instatce
+	 * @param $attributes
+	 */
+	public static function setHasDateRestrictionsAttributes($instatce, $attributes)
+	{
+		$instatce->setDateRestrictions($attributes['dateStart'], $attributes['dateEnd']);
 	}
 
 }

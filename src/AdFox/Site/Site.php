@@ -8,44 +8,11 @@ use AdFox\BaseObject;
 class Site extends BaseObject{
 
 	/**
-	 * Site name
-	 *
-	 * @var string
-	 */
-	public $name;
-
-	/**
 	 * Places register on this site
 	 *
 	 * @var Place[]
 	 */
 	public $places = [];
-
-	/**
-	 * Attributes that can be modified
-	 *
-	 * @var array
-	 */
-	protected $attributes = ['id', 'name'];
-
-	/**
-	 * Site constructor.
-	 *
-	 * @param AdFox $adfox
-	 * @param array $attributes
-	 * @param array $relations
-	 *
-	 * @return Site
-	 */
-	public static function createFromResponse(AdFox $adfox, $attributes, $relations = [])
-	{
-		$site = new self($adfox);
-		$site->id = $attributes['ID'];
-		$site->name = $attributes['name'];
-		$site->loadRelations($relations);
-
-		return $site;
-	}
 
 	/**
 	 * Find place on this site by name
@@ -95,5 +62,15 @@ class Site extends BaseObject{
 	protected function getType()
 	{
 		return \AdFox\AdFox::OBJECT_SITE;
+	}
+
+	/**
+	 * Get URL of this site
+	 *
+	 * @return string
+	 */
+	protected function getUrl()
+	{
+		return $this->adfox->baseUrl . 'sections.php?navigationTab=websites&websiteID=' . $this->id;
 	}
 }

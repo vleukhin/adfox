@@ -1,22 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vleukhin
- * Date: 04.07.2016
- * Time: 13:30
- */
 
-namespace AdFox\Campaigns;
+namespace AdFox\Campaign;
 
 use AdFox\AdFox;
 use AdFox\BaseObject;
-use AdFox\Campaigns\Banner\Banner;
-use AdFox\Campaigns\Banner\Template;
-use AdFox\Campaigns\Traits\Restrictions\HasClicksRestrictions;
-use AdFox\Campaigns\Traits\Restrictions\HasDateRestrictions;
-use AdFox\Campaigns\Traits\Restrictions\HasImpressionsRestrictions;
-use AdFox\Campaigns\Traits\HasStatus;
-use AdFox\Campaigns\Traits\HasLevel;
+use AdFox\Campaign\Banner\Banner;
+use AdFox\Campaign\Banner\Template;
+use AdFox\Campaign\Traits\Restrictions\HasClicksAndImpressions;
+use AdFox\Campaign\Traits\Restrictions\HasClicksAndImpressionsSmooth;
+use AdFox\Campaign\Traits\Restrictions\HasDateRestrictions;
+use AdFox\Campaign\Traits\HasStatus;
+use AdFox\Campaign\Traits\HasLevel;
 use AdFox\Site\Place;
 use AdFox\Site\Site;
 
@@ -24,8 +18,8 @@ class Flight extends BaseObject{
 	
 	use HasStatus;
 	use HasLevel;
-	use HasClicksRestrictions;
-	use HasImpressionsRestrictions;
+	use HasClicksAndImpressions;
+	use HasClicksAndImpressionsSmooth;
 	use HasDateRestrictions;
 
 	const ROTATION_PRIORY = 0;
@@ -43,19 +37,7 @@ class Flight extends BaseObject{
 	 *
 	 * @var array
 	 */
-	protected $attributes = [
-		'id', 'status', 'level', 'superCampaignId',
-		'maxImpressions', 'maxImpressionsPerDay', 'maxImpressionsPerHour',
-		'maxClicks', 'maxClicksPerDay', 'maxClicksPerHour',
-		'dateStart', 'dateEnd',
-	];
-
-	/**
-	 * Attributes that can be set to null
-	 *
-	 * @var array
-	 */
-	protected $nullable = ['dateEnd'];
+	protected $attributes = ['id', 'name', 'superCampaignId'];
 
 	/**
 	 * Campaign this filght is assign to
@@ -73,16 +55,9 @@ class Flight extends BaseObject{
 	 */
 	public function __construct(AdFox $adfox, $attributes, $relations = [])
 	{
-		parent::__construct($adfox);
-		
-		$this->id = $attributes['ID'];
-		$this->status = $attributes['status'];
-		$this->level = $attributes['level'];
 		$this->superCampaignID = $attributes['superCampaignID'];
-		$this->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
-		$this->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
-		
-		$this->loadRelations($relations);
+
+		parent::__construct($adfox, $attributes, $relations);
 	}
 
 	/**
@@ -192,6 +167,7 @@ class Flight extends BaseObject{
 	/**
 	 * Place/Remove this flight object on/from given placable object
 	 *
+	 * @param $type
 	 * @param int $objectId
 	 * @param bool $remove remove flag, default is false
 	 * @throws \AdFox\AdfoxException
@@ -214,17 +190,12 @@ class Flight extends BaseObject{
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Get URL of this flight
+	 *
+	 * @return string
 	 */
-	public function toArray()
+	public function getUrl()
 	{
-		$array = parent::toArray();
-
-		if (!is_null($this->campaign))
-		{
-			$array['campaign'] = $this->campaign->toArray();
-		}
-
-		return $array;
+		return $this->adfox->baseUrl . 'banners.php?campaignID=' . $this->id;
 	}
 }

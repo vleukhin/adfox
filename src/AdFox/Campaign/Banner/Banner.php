@@ -1,28 +1,19 @@
 <?php
 
-namespace AdFox\Campaigns\Banner;
+namespace AdFox\Campaign\Banner;
 
 use AdFox\AdFox;
 use AdFox\BaseObject;
-use AdFox\Campaigns\Flight;
-use AdFox\Campaigns\Traits\Restrictions\HasClicksRestrictions;
-use AdFox\Campaigns\Traits\Restrictions\HasDateRestrictions;
-use AdFox\Campaigns\Traits\Restrictions\HasImpressionsRestrictions;
-use AdFox\Campaigns\Traits\HasStatus;
+use AdFox\Campaign\Flight;
+use AdFox\Campaign\Traits\Restrictions\HasClicksAndImpressions;
+use AdFox\Campaign\Traits\Restrictions\HasDateRestrictions;
+use AdFox\Campaign\Traits\HasStatus;
 
 class Banner extends BaseObject{
 
 	use HasStatus;
-	use HasClicksRestrictions;
-	use HasImpressionsRestrictions;
+	use HasClicksAndImpressions;
 	use HasDateRestrictions;
-
-	/**
-	 * Banner name
-	 *
-	 * @var string
-	 */
-	public $name;
 
 	/**
 	 * Banner template
@@ -36,20 +27,7 @@ class Banner extends BaseObject{
 	 *
 	 * @var array
 	 */
-	protected $attributes = [
-		'id', 'name', 'status', 'campaignId',
-		'maxImpressions', 'maxImpressionsPerDay', 'maxImpressionsPerHour',
-		'maxClicks', 'maxClicksPerDay', 'maxClicksPerHour',
-		'user1', 'user2', 'user3', 'user4', 'user5', 'user6', 'user7', 'user8', 'user9', 'user10', 'user11', 'user12',
-		'dateStart', 'dateEnd',
-	];
-
-	/**
-	 * Attributes that can be set to null
-	 *
-	 * @var array
-	 */
-	protected $nullable = ['dateEnd'];
+	protected $attributes = ['id', 'name', 'campaignId'];
 
 	/**
 	 * Banner params
@@ -76,14 +54,8 @@ class Banner extends BaseObject{
 	 */
 	public static function createFromResponse(AdFox $adfox, $attributes, $relations = [])
 	{
-		$banner = new self($adfox);
-
-		$banner->id = $attributes['ID'];
-		$banner->status = $attributes['status'];
+		$banner = new static($adfox, $attributes, $relations);
 		$banner->campaignID = $attributes['campaignID'];
-		$banner->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
-		$banner->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
-		$banner->setDateRestrictions($attributes['dateStart'], $attributes['dateEnd']);
 
 		foreach ($attributes as $attribute => $value)
 		{
@@ -92,8 +64,6 @@ class Banner extends BaseObject{
 				$banner->setParam('user' . $matches[1], (string) $value);
 			}
 		}
-
-		$banner->loadRelations($relations);
 
 		return $banner;
 	}
@@ -209,5 +179,15 @@ class Banner extends BaseObject{
 	protected function getType()
 	{
 		return AdFox::OBJECT_BANNER;
+	}
+
+	/**
+	 * Get URL of this banner
+	 *
+	 * @return string
+	 */
+	public function getUrl()
+	{
+		return $this->adfox->baseUrl . 'modifyBannerForm.php?bannerID=' . $this->id;
 	}
 }

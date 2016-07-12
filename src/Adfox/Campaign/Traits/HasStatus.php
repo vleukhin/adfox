@@ -1,6 +1,6 @@
 <?php
 
-namespace AdFox\Campaigns\Traits;
+namespace AdFox\Campaign\Traits;
 
 use AdFox\AdFox;
 
@@ -51,7 +51,7 @@ trait HasStatus {
 	 */
 	public function setStatus($status)
 	{
-		if (in_array($status, [AdFox::OBJECT_STATUS_ACTIVE, AdFox::OBJECT_STATUS_PAUSED, AdFox::OBJECT_STATUS_COMPLETED]))
+		if (in_array($status, AdFox::getConstants('OBJECT_STATUS')))
 		{
 			$this->status = $status;
 		}
@@ -59,4 +59,24 @@ trait HasStatus {
 		return $this;
 	}
 
+	/**
+	 * Returns this trait attributes
+	 *
+	 * @return array
+	 */
+	public static function getHasStatusAttributes()
+	{
+		return ['status'];
+	}
+
+	/**
+	 * Sets this trait attributes
+	 *
+	 * @param $instatce
+	 * @param $attributes
+	 */
+	public static function setHasStatusAttributes($instatce, $attributes)
+	{
+		$instatce->setStatus($attributes['status']);
+	}
 }

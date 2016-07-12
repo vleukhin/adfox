@@ -2,11 +2,12 @@
 
 namespace AdFox;
 
-use AdFox\Campaigns\Banner\Banner;
-use AdFox\Campaigns\Banner\Type as BannerType;
-use AdFox\Campaigns\Campaign;
-use AdFox\Campaigns\Flight;
+use AdFox\Campaign\Banner\Banner;
+use AdFox\Campaign\Banner\Type as BannerType;
+use AdFox\Campaign\Campaign;
+use AdFox\Campaign\Flight;
 use AdFox\Site\Site;
+use ReflectionClass;
 
 /**
  * AdFox API wrapper class.
@@ -19,6 +20,13 @@ class AdFox {
 	 * @var string
 	 */
 	protected $apiUrl = 'https://api.adfox.ru/v1/API.php';
+
+	/**
+	 * Base AdFox GUI URL
+	 *
+	 * @var string
+	 */
+	public $baseUrl = 'https://login.adfox.ru/';
 
 	/**
 	 * User login.
@@ -34,6 +42,9 @@ class AdFox {
 	 */
 	protected $password = null;
 
+	/**
+	 * API response codes
+	 */
 	const CODE_NO_ERROR = 0;
 	const CODE_AUTH_ERROR = -1;
 	const CODE_PARAM_INCORRECT = -6;
@@ -41,6 +52,9 @@ class AdFox {
 	const CODE_PARAM_EMPTY = -9;
 	const CODE_API_CALL_ERROR = 60;
 
+	/**
+	 * API objects
+	 */
 	const OBJECT_ACCOUNT = 'account';
 	const OBJECT_CAMPAIGN = 'superCampaign';
 	const OBJECT_FLIGHT = 'campaign';
@@ -49,15 +63,33 @@ class AdFox {
 	const OBJECT_BANNER_TEMPLATE = 'template';
 	const OBJECT_SITE = 'website';
 	const OBJECT_PLACE = 'place';
+	const OBJECT_TARGETING = 'targeting';
+	const OBJECT_USERCRITERIA = 'userCriteria';
 
+	/**
+	 * API actions
+	 */
+	const ACTION_INFO = 'info';
 	const ACTION_LIST = 'list';
 	const ACTION_ADD = 'add';
 	const ACTION_MODIFY = 'modify';
 	const ACTION_PLACE = 'placing';
+	const ACTION_TARGET = 'target';
 
+	/**
+	 * Objects statuses
+	 */
 	const OBJECT_STATUS_ACTIVE = 0;
 	const OBJECT_STATUS_PAUSED = 1;
 	const OBJECT_STATUS_COMPLETED = 2;
+
+	/**
+	 * Smooth types
+	 */
+	const SMOOTH_MAX = 0;
+	const SMOOTH_STEADY_DAY = 1;
+	const SMOOTH_STEADY_ALL = 2;
+	const SMOOTH_STEADY_ALL_AUTO = 3;
 
 	const DATE_FORMAT = 'Y-m-d H:i';
 
@@ -104,6 +136,7 @@ class AdFox {
 			'object' => $object,
 			'action' => $action,
 			'actionObject' => $actionObject,
+			'encoding' => 'UTF-8',
 		];
 
 		$request += $parameters;
@@ -153,7 +186,6 @@ class AdFox {
 		if ($attributes = $this->findObject(self::OBJECT_CAMPAIGN, $id))
 		{
 			return new Campaign($this, (array) $attributes, $relations);
-
 		}
 
 		return null;
@@ -237,6 +269,29 @@ class AdFox {
 	}
 
 	/**
+	 * Make call to API and passes list results through given callback
+	 *
+	 * @param $callback
+	 * @param $object
+	 * @param $action
+	 * @param null $actionObject
+	 * @param array $parameters
+	 * @throws AdfoxException
+	 */
+	public function callApiCallbackLoop($callback, $object, $action, $actionObject = null, $parameters = [])
+	{
+		$response = $this->callApi($object, $action, $actionObject, $parameters);
+
+		if (!empty($response->data))
+		{
+			foreach ($response->data->children() as $children)
+			{
+				$callback((array) $children);
+			}
+		}
+	}
+
+	/**
 	 * Find BannerType by id
 	 *
 	 * @param $id
@@ -247,7 +302,7 @@ class AdFox {
 	{
 		if ($attributes = $this->findObject(self::OBJECT_SITE, $id))
 		{
-			return Site::createFromResponse($this, $attributes, $relations);
+			return  new Site($this, $attributes, $relations);
 		}
 
 		return null;
@@ -270,7 +325,7 @@ class AdFox {
 			{
 				if ((string) $site->name == $name)
 				{
-					return Site::createFromResponse($this, (array) $site, $relations);
+					return new Site($this, (array) $site, $relations);
 				}
 			}
 		}
@@ -311,5 +366,31 @@ class AdFox {
 		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_ADD, self::OBJECT_CAMPAIGN, ['name' => $name, 'advertiserID' => $advertiserId]);
 
 		return $this->findCampaign($response->ID);
+	}
+
+	/**
+	 * Gets array of AdFox defined constants
+	 *
+	 * @param string $prefix filter by prefix
+	 *
+	 * @return array
+	 */
+	public static function getConstants($prefix = null)
+	{
+		$reflect = new ReflectionClass(static::class);
+		$constants =  $reflect->getConstants();
+
+		if (!is_null($prefix))
+		{
+			foreach ($constants as $name => $value)
+			{
+				if (strpos($name, $prefix) !== 0)
+				{
+					unset($constants[$name]);
+				}
+			}
+		}
+
+		return $constants;
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace AdFox\Campaigns\Traits\Restrictions;
+namespace AdFox\Campaign\Traits\Restrictions;
 
 trait HasActiveEventsRestrictions {
 
@@ -85,6 +85,27 @@ trait HasActiveEventsRestrictions {
 	public function getMaxActiveEventsPerHour()
 	{
 		return $this->maxActiveEventsPerHour;
+	}
+
+	/**
+	 * Returns this trait attributes
+	 * 
+	 * @return array
+	 */
+	public static function getHasActiveEventsRestrictionsAttributes()
+	{
+		return ['maxActiveEvents', 'maxActiveEventsPerDay', 'maxActiveEventsPerHour'];
+	}
+
+	/**
+	 * Sets this trait attributes
+	 *
+	 * @param $instatce
+	 * @param $attributes
+	 */
+	public static function setHasActiveEventsRestrictionsAttributes($instatce, $attributes)
+	{
+		$instatce->setActiveEventsLimits($attributes['maxActiveEvents'], $attributes['maxActiveEventsPerDay'], $attributes['maxActiveEventsPerHour']);
 	}
 
 }

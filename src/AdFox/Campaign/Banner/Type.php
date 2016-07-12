@@ -1,49 +1,18 @@
 <?php
 
-namespace AdFox\Campaigns\Banner;
+namespace AdFox\Campaign\Banner;
 
 use AdFox\AdFox;
 use AdFox\BaseObject;
 
 class Type extends BaseObject{
-
-	/**
-	 * BannerType name
-	 *
-	 * @var string
-	 */
-	public $name;
-
+	
 	/**
 	 * Templates of this banner type
 	 *
 	 * @var Template[]
 	 */
 	public $templates = [];
-
-	/**
-	 * Attributes that can be modified
-	 *
-	 * @var array
-	 */
-	protected $attributes = ['id', 'name'];
-
-	/**
-	 * BannerType constructor.
-	 *
-	 * @param AdFox $adFox
-	 * @param array $attributes
-	 * @param array $relations
-	 */
-	public function __construct(AdFox $adFox, $attributes, $relations = [])
-	{
-		parent::__construct($adFox);
-
-		$this->id = $attributes['ID'];
-		$this->name = $attributes['name'];
-
-		$this->loadRelations($relations);
-	}
 
 	/**
 	 * Loads templates of this banner type
@@ -94,5 +63,15 @@ class Type extends BaseObject{
 	protected function getType()
 	{
 		return AdFox::OBJECT_BANNER_TYPE;
+	}
+
+	/**
+	 * Get URL of this type
+	 *
+	 * @return string
+	 */
+	protected function getUrl()
+	{
+		return $this->adfox->baseUrl . 'templates.php?bannerTypeID=' . $this->id;
 	}
 }

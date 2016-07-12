@@ -71,27 +71,31 @@ $banner = $adfox->findBanner(1724257)->setParam('user5', '55%')->save();
 ```
 $adfox = new Adfox\Adfox('login', 'pass');
 
-$campaign = $adfox->createCampaign('Hills Branding', 212095);
-$flight = $campaign->createFlight('Hiils на КакПросто');
+$flight = $adfox->findFlight(123);
+$site = $adfox->findSiteByName('kakprosto.ru');
+$place = $site->findPlaceByName('Брендирование (асинх.)');
 
-$place = $adfox->findSiteByName('kakprosto.ru')->findPlaceByName('Брендирование (асинх.)');
+$flight->placeOnPlace($place);
+$flight->removeFromPlace($place);
 
-$flight->setLevel(3)
-	->setImpressionsLimits(50000, 1000, 100)
-	->setClicksLimits(1000)
-	->setStatus(\AdFox\AdFox::OBJECT_STATUS_PAUSED)
-	->setEndDate(strtotime('+1 week'))
-	->placeOnPlace($place)
-	->save();
+$flight->placeOnSite($site);
+$flight->removeFromPlace($site);
+```
 
-$template = $place->loadBannerType()->bannerType->findTemplate('BackGround WShifter // KP');
+#### Setting targeting
+```
+$adfox = new Adfox\Adfox('login', 'pass');
 
-$banner = \AdFox\Campaigns\Banner\Banner::make($adfox, 'Брендирование Hills', $template, [
-	'user1' => '#ccc',
-	'user2' => 'Ссылка на изображение',
-	'user11' => 'http://hills.ru',
-	'trackingUrl' => 'http://ad.adriver.ru/cgi-bin/rle.cgi?sid=1&bt=21&ad=591759&pid=2374609&bid=4536971&bn=4536971&rnd=%random%'
-]);
+$flight = $adfox->findFlight(123);
+$targeting = new \AdFox\Campaign\Targeting\TargetingTime();
+// Set impressions limits to 100 on mondays
+$targeting->setImpressions(100, \AdFox\Campaign\Targeting\TargetingTime::DAY_MONDAY);
 
-$banner->addToFlight($flight);
+$flight->applyTargeting($targeting);
+
+$targeting = new \AdFox\Campaign\Targeting\TargetingUser($adfox, 1 /* puid1 */);
+$targeting->disableAll();
+$targeting->enable(3); // enable option with key=3
+
+$flight->applyTargeting($targeting);
 ```

@@ -1,12 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vleukhin
- * Date: 04.07.2016
- * Time: 14:07
- */
 
 namespace AdFox;
+
+use AdFox\Campaign\Targeting\Contracts\Targeting;
 
 abstract class BaseObject {
 
@@ -16,6 +12,13 @@ abstract class BaseObject {
 	 * @var int
 	 */
 	public $id = null;
+
+	/**
+	 * Object name
+	 *
+	 * @var string
+	 */
+	public $name;
 
 	/**
 	 * Adfox lib instance
@@ -29,18 +32,27 @@ abstract class BaseObject {
 	 *
 	 * @var array
 	 */
-	protected $attributes = [];
+	protected $attributes = ['id', 'name'];
 
 	/**
-	 * Attributes that can be set to null
+	 * BaseObject constructor.
 	 *
-	 * @var array
+	 * @param AdFox $adFox
+	 * @param array $attributes
+	 * @param array $relations
 	 */
-	protected $nullable = [];
-
-	public function __construct(AdFox $adFox)
+	public function __construct(AdFox $adFox, $attributes = [], $relations = [])
 	{
-		$this->adfox = $adFox;
+		$this->setAdfox($adFox);
+		$this->id = $attributes['ID'];
+		$this->name = $attributes['name'];
+
+		foreach (class_uses(static::class) as $trait)
+		{
+			call_user_func_array([$trait, 'set' . basename($trait) . 'Attributes'], [$this, $attributes]);
+		}
+
+		$this->loadRelations($relations);
 	}
 
 	/**
@@ -60,11 +72,18 @@ abstract class BaseObject {
 	 */
 	public function toArray()
 	{
+		$attributes = $this->attributes;
+		
+		foreach (class_uses(static::class) as $trait)
+		{
+			$attributes = array_merge($attributes, call_user_func([$trait, 'get' . basename($trait) . 'Attributes']));
+		}
+		
 		$array = [];
 
-		foreach ($this->attributes as $property)
+		foreach ($attributes as $property)
 		{
-			if (property_exists($this, $property) and (!is_null($this->{$property}) or in_array($property, $this->nullable)))
+			if (property_exists($this, $property))
 			{
 				$array[$property] = $this->{$property};
 			}
@@ -93,6 +112,7 @@ abstract class BaseObject {
 	 */
 	protected function loadRelations($relations)
 	{
+		$relations = (array) $relations;
 		foreach ($relations as $relation)
 		{
 			$method = 'load'.ucfirst($relation);
@@ -103,6 +123,21 @@ abstract class BaseObject {
 		}
 	}
 
+	/**
+	 * Apply targeting to this object
+	 *
+	 * @param Targeting $targeting
+	 * @throws AdfoxException
+	 *
+	 * @return $this
+	 */
+	public function applyTargeting(Targeting $targeting)
+	{
+		$params = ['objectID' => $this->id] + $targeting->getParams();
+		$this->adfox->callApi($this->getType(), AdFox::ACTION_TARGET, $targeting->getType(), $params);
+
+		return $this;
+	}
 
 	/**
 	 * Get Object type. String constant from AdFox class.
@@ -110,4 +145,11 @@ abstract class BaseObject {
 	 * @return string
 	 */
 	abstract protected function getType();
+
+	/**
+	 * Get URL of this object
+	 *
+	 * @return string
+	 */
+	abstract protected function getUrl();
 }

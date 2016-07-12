@@ -1,6 +1,6 @@
 <?php
 
-namespace AdFox\Campaigns\Traits;
+namespace AdFox\Campaign\Traits;
 
 trait HasLevel {
 
@@ -35,5 +35,26 @@ trait HasLevel {
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Returns this trait attributes
+	 *
+	 * @return array
+	 */
+	public static function getHasLevelAttributes()
+	{
+		return ['level'];
+	}
+
+	/**
+	 * Sets this trait attributes
+	 *
+	 * @param $instatce
+	 * @param $attributes
+	 */
+	public static function setHasLevelAttributes($instatce, $attributes)
+	{
+		$instatce->setLevel($attributes['level']);
 	}
 }

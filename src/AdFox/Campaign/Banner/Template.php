@@ -1,40 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vleukhin
- * Date: 04.07.2016
- * Time: 18:27
- */
 
-namespace AdFox\Campaigns\Banner;
-
+namespace AdFox\Campaign\Banner;
 
 use AdFox\AdFox;
 use AdFox\BaseObject;
 
 class Template extends BaseObject{
-
-	/**
-	 * Banner type of this template
-	 *
-	 * @var Type
-	 */
-	public $bannerType;
-
-	/**
-	 * Template name
-	 *
-	 * @var string
-	 */
-	public $name;
-
-	/**
-	 * Attributes that can be modified
-	 *
-	 * @var array
-	 */
-	protected $attributes = ['id', 'name'];
-
+	
 	/**
 	 * Banner template constructor.
 	 *
@@ -44,12 +16,10 @@ class Template extends BaseObject{
 	 */
 	public function __construct(AdFox $adFox, $attributes, $relations = [])
 	{
-		parent::__construct($adFox);
+		$attributes['ID'] = $attributes['templateID'];
+		$attributes['name'] = $attributes['templateName'];
 
-		$this->id = $attributes['templateID'];
-		$this->name = $attributes['templateName'];
-
-		$this->loadRelations($relations);
+		parent::__construct($adFox, $attributes, $relations);
 	}
 
 	/**
@@ -60,5 +30,15 @@ class Template extends BaseObject{
 	protected function getType()
 	{
 		return AdFox::OBJECT_BANNER_TEMPLATE;
+	}
+
+	/**
+	 * Get URL of this object
+	 *
+	 * @return string
+	 */
+	protected function getUrl()
+	{
+		return $this->adfox->baseUrl . 'modifyTemplateForm.php?templateID=' . $this->id;
 	}
 }
