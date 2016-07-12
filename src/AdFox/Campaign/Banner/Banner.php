@@ -5,16 +5,14 @@ namespace AdFox\Campaign\Banner;
 use AdFox\AdFox;
 use AdFox\BaseObject;
 use AdFox\Campaign\Flight;
-use AdFox\Campaign\Traits\Restrictions\HasClicksRestrictions;
+use AdFox\Campaign\Traits\Restrictions\HasClicksAndImpressions;
 use AdFox\Campaign\Traits\Restrictions\HasDateRestrictions;
-use AdFox\Campaign\Traits\Restrictions\HasImpressionsRestrictions;
 use AdFox\Campaign\Traits\HasStatus;
 
 class Banner extends BaseObject{
 
 	use HasStatus;
-	use HasClicksRestrictions;
-	use HasImpressionsRestrictions;
+	use HasClicksAndImpressions;
 	use HasDateRestrictions;
 
 	/**

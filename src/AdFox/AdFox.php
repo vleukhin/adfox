@@ -84,12 +84,12 @@ class AdFox {
 	const OBJECT_STATUS_COMPLETED = 2;
 
 	/**
-	 * Impressions smooth types
+	 * Smooth types
 	 */
-	const IMP_SMOOTH_MAX = 0;
-	const IMP_SMOOTH_DAY_STEADY = 1;
-	const IMP_SMOOTH_ALL_STEADY = 2;
-	const IMP_SMOOTH_ALL_STEADY_AUTO = 3;
+	const SMOOTH_MAX = 0;
+	const SMOOTH_STEADY_DAY = 1;
+	const SMOOTH_STEADY_ALL = 2;
+	const SMOOTH_STEADY_ALL_AUTO = 3;
 
 	const DATE_FORMAT = 'Y-m-d H:i';
 

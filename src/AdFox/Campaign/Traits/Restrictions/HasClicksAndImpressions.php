@@ -2,7 +2,30 @@
 
 namespace AdFox\Campaign\Traits\Restrictions;
 
-trait HasImpressionsRestrictions {
+use AdFox\AdFox;
+
+trait HasClicksAndImpressions {
+	
+	/**
+	 * Total clicks limit
+	 *
+	 * @var int
+	 */
+	protected $maxClicks = 0;
+
+	/**
+	 * Clicks limit per day
+	 *
+	 * @var int
+	 */
+	protected $maxClicksPerDay = 0;
+
+	/**
+	 * Clicks limit per hour
+	 *
+	 * @var int
+	 */
+	protected $maxClicksPerHour = 0;
 
 	/**
 	 * Total impressions limit
@@ -24,7 +47,25 @@ trait HasImpressionsRestrictions {
 	 * @var int
 	 */
 	protected $maxImpressionsPerHour = 0;
-	
+
+	/**
+	 * Set clicks limits for the object.
+	 * 0 for no limit
+	 *
+	 * @param int $total
+	 * @param int $day
+	 * @param int $hour
+	 * @return $this
+	 */
+	public function setClicksLimits($total = null, $day = null, $hour = null)
+	{
+		$this->maxClicks = is_null($total) ? $this->getMaxClicks() : (int) $total;
+		$this->maxClicksPerDay = is_null($day) ? $this->getMaxClicksPerDay() : (int) $day;
+		$this->maxClicksPerHour = is_null($hour) ? $this->getMaxClicksPerHour() : (int) $hour;
+
+		return $this;
+	}
+
 	/**
 	 * Set impressions limits for the object.
 	 * 0 for no limit
@@ -44,6 +85,20 @@ trait HasImpressionsRestrictions {
 	}
 
 	/**
+	 * Get all type clicks limits of the object
+	 *
+	 * @return array
+	 */
+	public function getClicksLimits()
+	{
+		return [
+			'total' => $this->getMaxClicks(),
+			'day' => $this->getMaxClicksPerDay(),
+			'hour' => $this->getMaxClicksPerHour(),
+		];
+	}
+
+	/**
 	 * Get all type impressions limits of the object
 	 *
 	 * @return array
@@ -55,6 +110,36 @@ trait HasImpressionsRestrictions {
 			'day' => $this->getMaxImpressionsPerDay(),
 			'hour' => $this->getMaxImpressionsPerHour(),
 		];
+	}
+
+	/**
+	 * Get clicks limits of the object
+	 *
+	 * @return int
+	 */
+	public function getMaxClicks()
+	{
+		return $this->maxClicks;
+	}
+
+	/**
+	 * Get clicks per day limits of the object
+	 *
+	 * @return int
+	 */
+	public function getMaxClicksPerDay()
+	{
+		return $this->maxClicksPerDay;
+	}
+
+	/**
+	 * Get clicks per hour limits of the object
+	 *
+	 * @return int
+	 */
+	public function getMaxClicksPerHour()
+	{
+		return $this->maxClicksPerHour;
 	}
 
 	/**
@@ -87,14 +172,19 @@ trait HasImpressionsRestrictions {
 		return $this->maxImpressionsPerHour;
 	}
 
+	
+
 	/**
 	 * Returns this trait attributes
 	 *
 	 * @return array
 	 */
-	public static function getHasImpressionsRestrictionsAttributes()
+	public static function getHasClicksAndImpressionsAttributes()
 	{
-		return ['maxImpressions', 'maxImpressionsPerDay', 'maxImpressionsPerHour'];
+		return [
+			'maxClicks', 'maxClicksPerDay', 'maxClicksPerHour',
+			'maxImpressions', 'maxImpressionsPerDay', 'maxImpressionsPerHour',
+		];
 	}
 
 	/**
@@ -103,8 +193,9 @@ trait HasImpressionsRestrictions {
 	 * @param $instatce
 	 * @param $attributes
 	 */
-	public static function setHasImpressionsRestrictionsAttributes($instatce, $attributes)
+	public static function setHasClicksAndImpressionsAttributes($instatce, $attributes)
 	{
+		$instatce->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
 		$instatce->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
 	}
 }

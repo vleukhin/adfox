@@ -5,17 +5,15 @@ namespace AdFox\Campaign;
 use AdFox\AdFox;
 use AdFox\BaseObject;
 use AdFox\Campaign\Traits\Restrictions\HasActiveEventsRestrictions;
-use AdFox\Campaign\Traits\Restrictions\HasClicksRestrictions;
+use AdFox\Campaign\Traits\Restrictions\HasClicksAndImpressions;
 use AdFox\Campaign\Traits\Restrictions\HasDateRestrictions;
-use AdFox\Campaign\Traits\Restrictions\HasImpressionsRestrictions;
 use AdFox\Campaign\Traits\HasStatus;
 
 class Campaign extends BaseObject{
 
 	use HasStatus;
 	use HasActiveEventsRestrictions;
-	use HasClicksRestrictions;
-	use HasImpressionsRestrictions;
+	use HasClicksAndImpressions;
 	use HasDateRestrictions;
 	
 	/**
