@@ -5,7 +5,28 @@ namespace AdFox\Campaign\Traits\Restrictions;
 use AdFox\AdFox;
 
 trait HasClicksAndImpressions {
-	
+
+	/**
+	 * Total clicks count
+	 *
+	 * @var int
+	 */
+	public $clicks = 0;
+
+	/**
+	 * Clicks count for today
+	 *
+	 * @var int
+	 */
+	public $clicksToday = 0;
+
+	/**
+	 * Clicks count for last hour
+	 *
+	 * @var int
+	 */
+	public $clicksHour = 0;
+
 	/**
 	 * Total clicks limit
 	 *
@@ -26,6 +47,27 @@ trait HasClicksAndImpressions {
 	 * @var int
 	 */
 	protected $maxClicksPerHour = 0;
+
+	/**
+	 * Impressions clicks count
+	 *
+	 * @var int
+	 */
+	public $impressions = 0;
+
+	/**
+	 * Impressions count for today
+	 *
+	 * @var int
+	 */
+	public $impressionsToday = 0;
+
+	/**
+	 * Impressions count for last hour
+	 *
+	 * @var int
+	 */
+	public $impressionsHour = 0;
 
 	/**
 	 * Total impressions limit
@@ -184,6 +226,8 @@ trait HasClicksAndImpressions {
 		return [
 			'maxClicks', 'maxClicksPerDay', 'maxClicksPerHour',
 			'maxImpressions', 'maxImpressionsPerDay', 'maxImpressionsPerHour',
+			'clicks', 'clicksToday', 'clicksHour',
+			'impressions', 'impressionsToday', 'impressionsHour'
 		];
 	}
 
@@ -197,5 +241,13 @@ trait HasClicksAndImpressions {
 	{
 		$instatce->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
 		$instatce->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
+
+		$instatce->clicks = $attributes['clicks'];
+		$instatce->clicksToday = $attributes['clicksToday'];
+		$instatce->clicksHour = $attributes['clicksHour'];
+		
+		$instatce->impressions = $attributes['impressions'];
+		$instatce->impressionsToday = $attributes['impressionsToday'];
+		$instatce->impressionsHour = $attributes['impressionsHour'];
 	}
 }
