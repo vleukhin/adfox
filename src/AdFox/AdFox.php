@@ -98,9 +98,11 @@ class AdFox {
 	 *
 	 * @param $login
 	 * @param $password
+	 * @param bool $debug
 	 */
-	public function __construct($login, $password)
+	public function __construct($login, $password, $debug = false)
 	{
+		$this->debug = $debug;
 		$this->login = $login;
 		$this->password = hash('sha256', $password);
 	}
@@ -147,6 +149,18 @@ class AdFox {
 		curl_setopt($curl, CURLOPT_POSTFIELDS, $request);
 
 		$response = curl_exec($curl);
+
+		if ($this->debug)
+		{
+			$info = curl_getinfo($curl);
+			echo '-------------------------------' . PHP_EOL;
+			echo '|  Send request to AdFox API  |' . PHP_EOL;
+			echo '-------------------------------' . PHP_EOL;
+			echo 'Request Content Length: ' .$info['upload_content_length'] . PHP_EOL;
+			echo 'Response HTTP code: ' . $info['http_code'] . PHP_EOL;
+			echo 'Params:' . PHP_EOL;
+			print_r($request);
+		}
 
 		if ($response == false)
 		{
