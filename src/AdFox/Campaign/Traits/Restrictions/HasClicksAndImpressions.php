@@ -2,8 +2,7 @@
 
 namespace AdFox\Campaign\Traits\Restrictions;
 
-use AdFox\AdFox;
-use AdFox\Campaign\Flight;
+use AdFox\Campaign\Banner\Banner;
 
 trait HasClicksAndImpressions {
 
@@ -243,7 +242,7 @@ trait HasClicksAndImpressions {
 		$instatce->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
 		$instatce->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
 
-		if(get_class($instatce) != Flight::class)
+		if (get_class($instatce) == Banner::class)
 		{
 			$instatce->clicks = $attributes['clicks'];
 			$instatce->clicksToday = $attributes['clicksToday'];

@@ -373,14 +373,29 @@ class AdFox {
 	/**
 	 * Creates campaign
 	 *
-	 * @param $name
-	 * @param $advertiserId
+	 * @param string $name name of campaign
+	 * @param int|string $advertiser id or name of advertiser
 	 * @return Campaign
 	 * @throws AdfoxException
 	 */
-	public function createCampaign($name, $advertiserId)
+	public function createCampaign($name, $advertiser)
 	{
-		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_ADD, self::OBJECT_CAMPAIGN, ['name' => $name, 'advertiserID' => $advertiserId]);
+		if (!is_int($advertiser))
+		{
+			$this->callApiCallbackLoop(function($advertiserData) use (&$advertiser) {
+				if ($advertiser == $advertiserData['account'])
+				{
+					$advertiser = (int) $advertiserData['ID'];
+				}
+			}, static::OBJECT_ACCOUNT, static::ACTION_LIST,  'advertiser');
+		}
+
+		if (!is_int($advertiser))
+		{
+			throw new AdfoxException('Can\'t find advertiser to create campaign');
+		}
+
+		$response = $this->callApi(static::OBJECT_ACCOUNT, static::ACTION_ADD, static::OBJECT_CAMPAIGN, ['name' => $name, 'advertiserID' => $advertiser]);
 
 		return $this->findCampaign($response->ID);
 	}
