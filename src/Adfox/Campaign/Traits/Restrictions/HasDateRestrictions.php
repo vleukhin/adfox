@@ -102,8 +102,8 @@ trait HasDateRestrictions {
 	/**
 	 * Sets this trait attributes
 	 *
-	 * @param $instatce
-	 * @param $attributes
+	 * @param static $instatce
+	 * @param array $attributes
 	 */
 	public static function setHasDateRestrictionsAttributes($instatce, $attributes)
 	{

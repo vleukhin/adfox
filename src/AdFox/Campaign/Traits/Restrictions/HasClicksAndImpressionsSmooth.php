@@ -78,8 +78,8 @@ trait HasClicksAndImpressionsSmooth {
 	/**
 	 * Sets this trait attributes
 	 *
-	 * @param $instatce
-	 * @param $attributes
+	 * @param static $instatce
+	 * @param array $attributes
 	 */
 	public static function setHasClicksAndImpressionsSmoothAttributes($instatce, $attributes)
 	{

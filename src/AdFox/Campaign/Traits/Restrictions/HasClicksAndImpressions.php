@@ -3,6 +3,7 @@
 namespace AdFox\Campaign\Traits\Restrictions;
 
 use AdFox\AdFox;
+use AdFox\Campaign\Flight;
 
 trait HasClicksAndImpressions {
 
@@ -234,20 +235,23 @@ trait HasClicksAndImpressions {
 	/**
 	 * Sets this trait attributes
 	 *
-	 * @param $instatce
-	 * @param $attributes
+	 * @param static $instatce
+	 * @param array $attributes
 	 */
 	public static function setHasClicksAndImpressionsAttributes($instatce, $attributes)
 	{
 		$instatce->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
 		$instatce->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
 
-		$instatce->clicks = $attributes['clicks'];
-		$instatce->clicksToday = $attributes['clicksToday'];
-		$instatce->clicksHour = $attributes['clicksHour'];
-		
-		$instatce->impressions = $attributes['impressions'];
-		$instatce->impressionsToday = $attributes['impressionsToday'];
-		$instatce->impressionsHour = $attributes['impressionsHour'];
+		if(get_class($instatce) != Flight::class)
+		{
+			$instatce->clicks = $attributes['clicks'];
+			$instatce->clicksToday = $attributes['clicksToday'];
+			$instatce->clicksHour = $attributes['clicksHour'];
+
+			$instatce->impressions = $attributes['impressions'];
+			$instatce->impressionsToday = $attributes['impressionsToday'];
+			$instatce->impressionsHour = $attributes['impressionsHour'];
+		}
 	}
 }
