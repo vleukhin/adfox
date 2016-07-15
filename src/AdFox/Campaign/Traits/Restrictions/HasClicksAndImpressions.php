@@ -234,12 +234,12 @@ trait HasClicksAndImpressions {
 	/**
 	 * Sets this trait attributes
 	 *
-	 * @param static $instatce
+	 * @param static $instance
 	 * @param array $attributes
 	 */
-	public static function setHasClicksAndImpressionsAttributes($instatce, $attributes)
+	public static function setHasClicksAndImpressionsAttributes($instance, $attributes)
 	{
-		$instatce->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
-		$instatce->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
+		$instance->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
+		$instance->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
 	}
 }

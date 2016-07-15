@@ -94,12 +94,12 @@ trait HasDateRestrictions {
 	/**
 	 * Sets this trait attributes
 	 *
-	 * @param static $instatce
+	 * @param static $instance
 	 * @param array $attributes
 	 */
-	public static function setHasDateRestrictionsAttributes($instatce, $attributes)
+	public static function setHasDateRestrictionsAttributes($instance, $attributes)
 	{
-		$instatce->setDateRestrictions($attributes['dateStart'], $attributes['dateEnd']);
+		$instance->setDateRestrictions($attributes['dateStart'], $attributes['dateEnd']);
 	}
 
 }

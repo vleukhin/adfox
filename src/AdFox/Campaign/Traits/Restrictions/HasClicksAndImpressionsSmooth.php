@@ -78,12 +78,12 @@ trait HasClicksAndImpressionsSmooth {
 	/**
 	 * Sets this trait attributes
 	 *
-	 * @param static $instatce
+	 * @param static $instance
 	 * @param array $attributes
 	 */
-	public static function setHasClicksAndImpressionsSmoothAttributes($instatce, $attributes)
+	public static function setHasClicksAndImpressionsSmoothAttributes($instance, $attributes)
 	{
-		$instatce->setImpresssionsSmoothType($attributes['impressionsSmoothTypeID']);
-		$instatce->setClicksSmoothType($attributes['clicksSmoothTypeID']);
+		$instance->setImpresssionsSmoothType($attributes['impressionsSmoothTypeID']);
+		$instance->setClicksSmoothType($attributes['clicksSmoothTypeID']);
 	}
 }
