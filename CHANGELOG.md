@@ -20,3 +20,9 @@ Added user and time targeting
 Added URL for each object
 Added clicks/impressions smooth type and counters
 Fixed encoding problems
+
+## v.0.5.0
+Added posibility to set file banners params
+Added franquency targeting
+Added debug mode (logs requests to stdout)
+Now campaign can be created using adverteser name instead of id
