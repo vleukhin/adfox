@@ -347,7 +347,7 @@ class AdFox {
 			}
 		}
 
-		return false;
+		return null;
 	}
 
 	/**
@@ -386,15 +386,21 @@ class AdFox {
 	}
 
 	/**
-	 * Gets array of AdFox defined constants
+	 * Gets array of defined constants
 	 *
 	 * @param string $prefix filter by prefix
+	 * @param string $class class to get consts from. defailt is AdFox
 	 *
 	 * @return array
 	 */
-	public static function getConstants($prefix = null)
+	public static function getConstants($prefix = null, $class = null)
 	{
-		$reflect = new ReflectionClass(static::class);
+		if (is_null($class))
+		{
+			$class = static::class;
+		}
+
+		$reflect = new ReflectionClass($class);
 		$constants =  $reflect->getConstants();
 
 		if (!is_null($prefix))
@@ -409,5 +415,25 @@ class AdFox {
 		}
 
 		return $constants;
+	}
+
+	/**
+	 * Convert given date string to Adfox format
+	 *
+	 * @param string|int $date
+	 * @return string
+	 */
+	public static function convertDate($date)
+	{
+		if (is_int($date))
+		{
+			$date = date(AdFox::DATE_FORMAT, $date);
+		}
+		elseif (!preg_match('@^\d{4}-\d{2}-\d{2}(\s\d{2}:\d{2}(:\d{2})?)?$@', $date))
+		{
+			$date = date(AdFox::DATE_FORMAT, strtotime($date));
+		}
+
+		return $date;
 	}
 }

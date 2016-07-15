@@ -6,6 +6,7 @@ interface Targeting
 {
 	const TYPE_TIME = 'targetingTime';
 	const TYPE_USER = 'targetingUser';
+	const TYPE_FREQUENCY = 'targetingFrequency';
 
 	/**
 	 * Get Object type. String constant from Targeting class.
@@ -17,7 +18,7 @@ interface Targeting
 	/**
 	 * Get params of this targeting
 	 *
-	 * @return mixed
+	 * @return array
 	 */
 	public function getParams();
 }

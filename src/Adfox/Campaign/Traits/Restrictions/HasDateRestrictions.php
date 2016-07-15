@@ -64,15 +64,7 @@ trait HasDateRestrictions {
 	 */
 	protected function setDate($type, $date)
 	{
-		if (is_int($date))
-		{
-			$date = date(AdFox::DATE_FORMAT, $date);
-		}
-
-		if (preg_match('@^\d{4}-\d{2}-\d{2}(\s\d{2}:\d{2}(:\d{2})?)?$@', $date))
-		{
-			$this->{'date' . $type} = $date;
-		}
+		$this->{'date' . $type} = AdFox::convertDate($date);
 
 		return $this;
 	}

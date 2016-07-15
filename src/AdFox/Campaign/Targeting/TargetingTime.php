@@ -202,7 +202,7 @@ class TargetingTime implements Targeting{
 	/**
 	 * Get params of this targeting
 	 *
-	 * @return mixed
+	 * @return array
 	 */
 	public function getParams()
 	{
