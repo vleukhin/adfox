@@ -27,7 +27,7 @@ class Banner extends BaseObject{
 	 *
 	 * @var array
 	 */
-	protected $attributes = ['id', 'name', 'campaignId'];
+	protected $attributes = ['id', 'name', 'campaignID'];
 
 	/**
 	 * Banner params
@@ -111,6 +111,35 @@ class Banner extends BaseObject{
 	public function setParam($name, $value)
 	{
 		$this->params[$name] = $value;
+
+		return $this;
+	}
+
+	/**
+	 * Set banner param as file
+	 *
+	 * @param $name
+	 * @param string $filePath path on server or URL
+	 * @return $this
+	 */
+	public function setFileParam($name, $filePath)
+	{
+		if ($this->campaignID)
+		{
+			$params = ['objectID' => $this->campaignID];
+
+			if (filter_var($filePath, FILTER_VALIDATE_URL) !== false)
+			{
+				$params['URL'] = $filePath;
+			}
+			else
+			{
+				$params['file'] = new \CURLFile($filePath);
+			}
+
+			$result = $this->adfox->callApi(AdFox::OBJECT_FLIGHT, AdFox::ACTION_UPLOAD, null, $params);
+			$this->params[$name] = (string) $result->value;
+		}
 
 		return $this;
 	}

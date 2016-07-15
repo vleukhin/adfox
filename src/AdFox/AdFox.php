@@ -19,7 +19,7 @@ class AdFox {
 	 *
 	 * @var string
 	 */
-	protected $apiUrl = 'https://api.adfox.ru/v1/API.php';
+	protected $apiUrl = 'https://login.adfox.ru/API.php';
 
 	/**
 	 * Base AdFox GUI URL
@@ -75,6 +75,7 @@ class AdFox {
 	const ACTION_MODIFY = 'modify';
 	const ACTION_PLACE = 'placing';
 	const ACTION_TARGET = 'target';
+	const ACTION_UPLOAD = 'upload';
 
 	/**
 	 * Objects statuses
@@ -157,6 +158,8 @@ class AdFox {
 			echo '|  Send request to AdFox API  |' . PHP_EOL;
 			echo '-------------------------------' . PHP_EOL;
 			echo 'Request Content Length: ' .$info['upload_content_length'] . PHP_EOL;
+			echo 'Request size: ' .$info['request_size'] . PHP_EOL;
+			echo 'Time: ' .$info['total_time'] . PHP_EOL;
 			echo 'Response HTTP code: ' . $info['http_code'] . PHP_EOL;
 			echo 'Params:' . PHP_EOL;
 			print_r($request);
