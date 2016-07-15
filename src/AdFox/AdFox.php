@@ -167,20 +167,20 @@ class AdFox {
 
 		if ($response == false)
 		{
-			throw new AdfoxException(curl_error($curl), self::CODE_API_CALL_ERROR);
+			throw new AdfoxException(curl_error($curl), static::CODE_API_CALL_ERROR);
 		}
 
 		$response = new \SimpleXMLElement($response);
 
 		if (empty($response))
 		{
-			throw new AdfoxException('Empty AdFox response', self::CODE_API_CALL_ERROR);
+			throw new AdfoxException('Empty AdFox response', static::CODE_API_CALL_ERROR);
 		}
-		elseif((string) $response->status->code != self::CODE_NO_ERROR)
+		elseif((string) $response->status->code != static::CODE_NO_ERROR)
 		{
 			$message = (string) $response->status->error;
 
-			if (in_array($response->status->code, [self::CODE_PARAM_MISSING, self::CODE_PARAM_EMPTY, self::CODE_PARAM_INCORRECT]))
+			if (in_array($response->status->code, [static::CODE_PARAM_MISSING, static::CODE_PARAM_EMPTY, static::CODE_PARAM_INCORRECT]))
 			{
 				$message .= ': ' . (string) $response->status->parameter;
 			}
@@ -200,7 +200,7 @@ class AdFox {
 	 */
 	public function findCampaign($id, $relations = [])
 	{
-		if ($attributes = $this->findObject(self::OBJECT_CAMPAIGN, $id))
+		if ($attributes = $this->findObject(static::OBJECT_CAMPAIGN, $id))
 		{
 			return new Campaign($this, (array) $attributes, $relations);
 		}
@@ -217,7 +217,7 @@ class AdFox {
 	 */
 	public function findFlight($id, $relations = [])
 	{
-		if ($attributes = $this->findObject(self::OBJECT_FLIGHT, $id))
+		if ($attributes = $this->findObject(static::OBJECT_FLIGHT, $id))
 		{
 			return new Flight($this, $attributes, $relations);
 		}
@@ -234,7 +234,7 @@ class AdFox {
 	 */
 	public function findBanner($id, $relations = [])
 	{
-		if ($attributes = $this->findObject(self::OBJECT_BANNER, $id))
+		if ($attributes = $this->findObject(static::OBJECT_BANNER, $id))
 		{
 			return Banner::createFromResponse($this, $attributes, $relations);
 		}
@@ -251,7 +251,7 @@ class AdFox {
 	 */
 	public function findBannerType($id, $relations = [])
 	{
-		if ($attributes = $this->findObject(self::OBJECT_BANNER_TYPE, $id))
+		if ($attributes = $this->findObject(static::OBJECT_BANNER_TYPE, $id))
 		{
 			return new BannerType($this, $attributes, $relations);
 		}
@@ -269,7 +269,7 @@ class AdFox {
 	 */
 	public function findBannerTypeByName($name, $relations = [])
 	{
-		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_LIST, self::OBJECT_BANNER_TYPE, ['limit' => 1000]);
+		$response = $this->callApi(static::OBJECT_ACCOUNT, static::ACTION_LIST, static::OBJECT_BANNER_TYPE, ['limit' => 1000]);
 
 		if (!empty($response->data))
 		{
@@ -317,7 +317,7 @@ class AdFox {
 	 */
 	public function findSite($id, $relations = [])
 	{
-		if ($attributes = $this->findObject(self::OBJECT_SITE, $id))
+		if ($attributes = $this->findObject(static::OBJECT_SITE, $id))
 		{
 			return  new Site($this, $attributes, $relations);
 		}
@@ -334,7 +334,7 @@ class AdFox {
 	 */
 	public function findSiteByName($name, $relations = [])
 	{
-		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_LIST, self::OBJECT_SITE, ['limit' => 1000]);
+		$response = $this->callApi(static::OBJECT_ACCOUNT, static::ACTION_LIST, static::OBJECT_SITE, ['limit' => 1000]);
 
 		if (!empty($response->data))
 		{
@@ -360,7 +360,7 @@ class AdFox {
 	 */
 	protected function findObject($type, $id)
 	{
-		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_LIST, $type, ['actionObjectID' => $id]);
+		$response = $this->callApi(static::OBJECT_ACCOUNT, static::ACTION_LIST, $type, ['actionObjectID' => $id]);
 
 		if (!empty($response->data))
 		{
