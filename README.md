@@ -6,6 +6,7 @@
 * Set impressions/clicks/events restrictions
 * Change flight/campaign status and level
 * Create/Editing banners
+* Targeting (user, time, frequency)
 
 ## Examples
 
@@ -96,6 +97,13 @@ $flight->applyTargeting($targeting);
 $targeting = new \AdFox\Campaign\Targeting\TargetingUser($adfox, 1 /* puid1 */);
 $targeting->disableAll();
 $targeting->enable(3); // enable option with key=3
+
+$flight->applyTargeting($targeting);
+
+$targeting = new \AdFox\Campaign\Targeting\TargetingFrequency();
+$targeting->setmaxUniqueImpressions(10);
+$targeting->setmaxUniqueClicks(2);
+$targeting->setClicksFrequency(\AdFox\Campaign\Targeting\TargetingFrequency::FREQUENCY_DAY, 3);
 
 $flight->applyTargeting($targeting);
 ```
