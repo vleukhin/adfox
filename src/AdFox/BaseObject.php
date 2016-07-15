@@ -49,7 +49,7 @@ abstract class BaseObject {
 
 		foreach (class_uses(static::class) as $trait)
 		{
-			call_user_func_array([$trait, 'set' . (new \ReflectionClass($trait))->getShortName() . 'Attributes'], [$this, $attributes]);
+			call_user_func_array([$this, 'set' . (new \ReflectionClass($trait))->getShortName() . 'Attributes'], [$this, $attributes]);
 		}
 
 		$this->loadRelations($relations);

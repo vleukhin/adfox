@@ -241,16 +241,5 @@ trait HasClicksAndImpressions {
 	{
 		$instatce->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
 		$instatce->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
-
-		if (get_class($instatce) == Banner::class)
-		{
-			$instatce->clicks = $attributes['clicks'];
-			$instatce->clicksToday = $attributes['clicksToday'];
-			$instatce->clicksHour = $attributes['clicksHour'];
-
-			$instatce->impressions = $attributes['impressions'];
-			$instatce->impressionsToday = $attributes['impressionsToday'];
-			$instatce->impressionsHour = $attributes['impressionsHour'];
-		}
 	}
 }

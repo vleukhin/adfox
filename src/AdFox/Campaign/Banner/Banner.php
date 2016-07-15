@@ -12,8 +12,10 @@ use AdFox\Campaign\Traits\HasStatus;
 class Banner extends BaseObject{
 
 	use HasStatus;
-	use HasClicksAndImpressions;
 	use HasDateRestrictions;
+	use HasClicksAndImpressions {
+		setHasClicksAndImpressionsAttributes as traitSetHasClicksAndImpressionsAttributes;
+	}
 
 	/**
 	 * Banner template
@@ -218,5 +220,24 @@ class Banner extends BaseObject{
 	public function getUrl()
 	{
 		return $this->adfox->baseUrl . 'modifyBannerForm.php?bannerID=' . $this->id;
+	}
+
+	/**
+	 * Sets additional HasClicksAndImpressions attributes
+	 *
+	 * @param Banner $instance
+	 * @param $attributes
+	 */
+	public static function setHasClicksAndImpressionsAttributes(self $instance, $attributes)
+	{
+		static::traitSetHasClicksAndImpressionsAttributes($instance, $attributes);
+
+		$instance->clicks = $attributes['clicks'];
+		$instance->clicksToday = $attributes['clicksToday'];
+		$instance->clicksHour = $attributes['clicksHour'];
+
+		$instance->impressions = $attributes['impressions'];
+		$instance->impressionsToday = $attributes['impressionsToday'];
+		$instance->impressionsHour = $attributes['impressionsHour'];
 	}
 }
