@@ -72,11 +72,11 @@ trait HasStatus {
 	/**
 	 * Sets this trait attributes
 	 *
-	 * @param $instatce
-	 * @param $attributes
+	 * @param static $instance
+	 * @param array $attributes
 	 */
-	public static function setHasStatusAttributes($instatce, $attributes)
+	public static function setHasStatusAttributes($instance, $attributes)
 	{
-		$instatce->setStatus($attributes['status']);
+		$instance->setStatus($attributes['status']);
 	}
 }

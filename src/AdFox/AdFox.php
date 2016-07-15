@@ -19,7 +19,7 @@ class AdFox {
 	 *
 	 * @var string
 	 */
-	protected $apiUrl = 'https://api.adfox.ru/v1/API.php';
+	protected $apiUrl = 'https://login.adfox.ru/API.php';
 
 	/**
 	 * Base AdFox GUI URL
@@ -75,6 +75,7 @@ class AdFox {
 	const ACTION_MODIFY = 'modify';
 	const ACTION_PLACE = 'placing';
 	const ACTION_TARGET = 'target';
+	const ACTION_UPLOAD = 'upload';
 
 	/**
 	 * Objects statuses
@@ -98,9 +99,11 @@ class AdFox {
 	 *
 	 * @param $login
 	 * @param $password
+	 * @param bool $debug
 	 */
-	public function __construct($login, $password)
+	public function __construct($login, $password, $debug = false)
 	{
+		$this->debug = $debug;
 		$this->login = $login;
 		$this->password = hash('sha256', $password);
 	}
@@ -148,22 +151,36 @@ class AdFox {
 
 		$response = curl_exec($curl);
 
+		if ($this->debug)
+		{
+			$info = curl_getinfo($curl);
+			echo '-------------------------------' . PHP_EOL;
+			echo '|  Send request to AdFox API  |' . PHP_EOL;
+			echo '-------------------------------' . PHP_EOL;
+			echo 'Request Content Length: ' .$info['upload_content_length'] . PHP_EOL;
+			echo 'Request size: ' .$info['request_size'] . PHP_EOL;
+			echo 'Time: ' .$info['total_time'] . PHP_EOL;
+			echo 'Response HTTP code: ' . $info['http_code'] . PHP_EOL;
+			echo 'Params:' . PHP_EOL;
+			print_r($request);
+		}
+
 		if ($response == false)
 		{
-			throw new AdfoxException(curl_error($curl), self::CODE_API_CALL_ERROR);
+			throw new AdfoxException(curl_error($curl), static::CODE_API_CALL_ERROR);
 		}
 
 		$response = new \SimpleXMLElement($response);
 
 		if (empty($response))
 		{
-			throw new AdfoxException('Empty AdFox response', self::CODE_API_CALL_ERROR);
+			throw new AdfoxException('Empty AdFox response', static::CODE_API_CALL_ERROR);
 		}
-		elseif((string) $response->status->code != self::CODE_NO_ERROR)
+		elseif((string) $response->status->code != static::CODE_NO_ERROR)
 		{
 			$message = (string) $response->status->error;
 
-			if (in_array($response->status->code, [self::CODE_PARAM_MISSING, self::CODE_PARAM_EMPTY, self::CODE_PARAM_INCORRECT]))
+			if (in_array($response->status->code, [static::CODE_PARAM_MISSING, static::CODE_PARAM_EMPTY, static::CODE_PARAM_INCORRECT]))
 			{
 				$message .= ': ' . (string) $response->status->parameter;
 			}
@@ -183,7 +200,7 @@ class AdFox {
 	 */
 	public function findCampaign($id, $relations = [])
 	{
-		if ($attributes = $this->findObject(self::OBJECT_CAMPAIGN, $id))
+		if ($attributes = $this->findObject(static::OBJECT_CAMPAIGN, $id))
 		{
 			return new Campaign($this, (array) $attributes, $relations);
 		}
@@ -200,7 +217,7 @@ class AdFox {
 	 */
 	public function findFlight($id, $relations = [])
 	{
-		if ($attributes = $this->findObject(self::OBJECT_FLIGHT, $id))
+		if ($attributes = $this->findObject(static::OBJECT_FLIGHT, $id))
 		{
 			return new Flight($this, $attributes, $relations);
 		}
@@ -217,7 +234,7 @@ class AdFox {
 	 */
 	public function findBanner($id, $relations = [])
 	{
-		if ($attributes = $this->findObject(self::OBJECT_BANNER, $id))
+		if ($attributes = $this->findObject(static::OBJECT_BANNER, $id))
 		{
 			return Banner::createFromResponse($this, $attributes, $relations);
 		}
@@ -234,7 +251,7 @@ class AdFox {
 	 */
 	public function findBannerType($id, $relations = [])
 	{
-		if ($attributes = $this->findObject(self::OBJECT_BANNER_TYPE, $id))
+		if ($attributes = $this->findObject(static::OBJECT_BANNER_TYPE, $id))
 		{
 			return new BannerType($this, $attributes, $relations);
 		}
@@ -252,7 +269,7 @@ class AdFox {
 	 */
 	public function findBannerTypeByName($name, $relations = [])
 	{
-		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_LIST, self::OBJECT_BANNER_TYPE, ['limit' => 1000]);
+		$response = $this->callApi(static::OBJECT_ACCOUNT, static::ACTION_LIST, static::OBJECT_BANNER_TYPE, ['limit' => 1000]);
 
 		if (!empty($response->data))
 		{
@@ -300,7 +317,7 @@ class AdFox {
 	 */
 	public function findSite($id, $relations = [])
 	{
-		if ($attributes = $this->findObject(self::OBJECT_SITE, $id))
+		if ($attributes = $this->findObject(static::OBJECT_SITE, $id))
 		{
 			return  new Site($this, $attributes, $relations);
 		}
@@ -317,7 +334,7 @@ class AdFox {
 	 */
 	public function findSiteByName($name, $relations = [])
 	{
-		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_LIST, self::OBJECT_SITE, ['limit' => 1000]);
+		$response = $this->callApi(static::OBJECT_ACCOUNT, static::ACTION_LIST, static::OBJECT_SITE, ['limit' => 1000]);
 
 		if (!empty($response->data))
 		{
@@ -330,7 +347,7 @@ class AdFox {
 			}
 		}
 
-		return false;
+		return null;
 	}
 
 	/**
@@ -343,7 +360,7 @@ class AdFox {
 	 */
 	protected function findObject($type, $id)
 	{
-		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_LIST, $type, ['actionObjectID' => $id]);
+		$response = $this->callApi(static::OBJECT_ACCOUNT, static::ACTION_LIST, $type, ['actionObjectID' => $id]);
 
 		if (!empty($response->data))
 		{
@@ -356,28 +373,49 @@ class AdFox {
 	/**
 	 * Creates campaign
 	 *
-	 * @param $name
-	 * @param $advertiserId
+	 * @param string $name name of campaign
+	 * @param int|string $advertiser id or name of advertiser
 	 * @return Campaign
 	 * @throws AdfoxException
 	 */
-	public function createCampaign($name, $advertiserId)
+	public function createCampaign($name, $advertiser)
 	{
-		$response = $this->callApi(self::OBJECT_ACCOUNT, self::ACTION_ADD, self::OBJECT_CAMPAIGN, ['name' => $name, 'advertiserID' => $advertiserId]);
+		if (!is_int($advertiser))
+		{
+			$this->callApiCallbackLoop(function($advertiserData) use (&$advertiser) {
+				if ($advertiser == $advertiserData['account'])
+				{
+					$advertiser = (int) $advertiserData['ID'];
+				}
+			}, static::OBJECT_ACCOUNT, static::ACTION_LIST,  'advertiser');
+		}
+
+		if (!is_int($advertiser))
+		{
+			throw new AdfoxException('Can\'t find advertiser to create campaign');
+		}
+
+		$response = $this->callApi(static::OBJECT_ACCOUNT, static::ACTION_ADD, static::OBJECT_CAMPAIGN, ['name' => $name, 'advertiserID' => $advertiser]);
 
 		return $this->findCampaign($response->ID);
 	}
 
 	/**
-	 * Gets array of AdFox defined constants
+	 * Gets array of defined constants
 	 *
 	 * @param string $prefix filter by prefix
+	 * @param string $class class to get consts from. defailt is AdFox
 	 *
 	 * @return array
 	 */
-	public static function getConstants($prefix = null)
+	public static function getConstants($prefix = null, $class = null)
 	{
-		$reflect = new ReflectionClass(static::class);
+		if (is_null($class))
+		{
+			$class = static::class;
+		}
+
+		$reflect = new ReflectionClass($class);
 		$constants =  $reflect->getConstants();
 
 		if (!is_null($prefix))
@@ -392,5 +430,25 @@ class AdFox {
 		}
 
 		return $constants;
+	}
+
+	/**
+	 * Convert given date string to Adfox format
+	 *
+	 * @param string|int $date
+	 * @return string
+	 */
+	public static function convertDate($date)
+	{
+		if (is_int($date))
+		{
+			$date = date(AdFox::DATE_FORMAT, $date);
+		}
+		elseif (!preg_match('@^\d{4}-\d{2}-\d{2}(\s\d{2}:\d{2}(:\d{2})?)?$@', $date))
+		{
+			$date = date(AdFox::DATE_FORMAT, strtotime($date));
+		}
+
+		return $date;
 	}
 }

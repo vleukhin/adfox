@@ -12,8 +12,10 @@ use AdFox\Campaign\Traits\HasStatus;
 class Banner extends BaseObject{
 
 	use HasStatus;
-	use HasClicksAndImpressions;
 	use HasDateRestrictions;
+	use HasClicksAndImpressions {
+		setHasClicksAndImpressionsAttributes as traitSetHasClicksAndImpressionsAttributes;
+	}
 
 	/**
 	 * Banner template
@@ -27,7 +29,7 @@ class Banner extends BaseObject{
 	 *
 	 * @var array
 	 */
-	protected $attributes = ['id', 'name', 'campaignId'];
+	protected $attributes = ['id', 'name', 'campaignID'];
 
 	/**
 	 * Banner params
@@ -116,6 +118,35 @@ class Banner extends BaseObject{
 	}
 
 	/**
+	 * Set banner param as file
+	 *
+	 * @param $name
+	 * @param string $filePath path on server or URL
+	 * @return $this
+	 */
+	public function setFileParam($name, $filePath)
+	{
+		if ($this->campaignID)
+		{
+			$params = ['objectID' => $this->campaignID];
+
+			if (filter_var($filePath, FILTER_VALIDATE_URL) !== false)
+			{
+				$params['URL'] = $filePath;
+			}
+			else
+			{
+				$params['file'] = new \CURLFile($filePath);
+			}
+
+			$result = $this->adfox->callApi(AdFox::OBJECT_FLIGHT, AdFox::ACTION_UPLOAD, null, $params);
+			$this->params[$name] = (string) $result->value;
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Get banner params
 	 *
 	 * @return array
@@ -189,5 +220,24 @@ class Banner extends BaseObject{
 	public function getUrl()
 	{
 		return $this->adfox->baseUrl . 'modifyBannerForm.php?bannerID=' . $this->id;
+	}
+
+	/**
+	 * Sets additional HasClicksAndImpressions attributes
+	 *
+	 * @param Banner $instance
+	 * @param $attributes
+	 */
+	public static function setHasClicksAndImpressionsAttributes(self $instance, $attributes)
+	{
+		static::traitSetHasClicksAndImpressionsAttributes($instance, $attributes);
+
+		$instance->clicks = $attributes['clicks'];
+		$instance->clicksToday = $attributes['clicksToday'];
+		$instance->clicksHour = $attributes['clicksHour'];
+
+		$instance->impressions = $attributes['impressions'];
+		$instance->impressionsToday = $attributes['impressionsToday'];
+		$instance->impressionsHour = $attributes['impressionsHour'];
 	}
 }

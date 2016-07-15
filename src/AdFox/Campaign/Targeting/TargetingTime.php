@@ -7,6 +7,7 @@
 
 namespace AdFox\Campaign\Targeting;
 
+use AdFox\AdFox;
 use AdFox\Campaign\Targeting\Contracts\Targeting;
 
 class TargetingTime implements Targeting{
@@ -19,8 +20,8 @@ class TargetingTime implements Targeting{
 	const DAY_SATURDAY = 6;
 	const DAY_SUNDAY = 7;
 
-	const MONTH_DAYS = 31;
-	const DAY_HOURS = 24;
+	const DAYS = 31;
+	const HOURS = 24;
 
 	/**
 	 * Impressions per day limits
@@ -65,15 +66,7 @@ class TargetingTime implements Targeting{
 	 */
 	protected function getWeekDays()
 	{
-		return [
-			self::DAY_MONDAY,
-			self::DAY_TUESDAY,
-			self::DAY_WEDNESDAY,
-			self::DAY_THURSDAY,
-			self::DAY_FRIDAY,
-			self::DAY_SATURDAY,
-			self::DAY_SUNDAY,
-		];
+		return AdFox::getConstants('DAY_', static::class);
 	}
 
 	/**
@@ -180,7 +173,7 @@ class TargetingTime implements Targeting{
 	{
 		if (!is_array($hours) or empty($hours))
 		{
-			$hours = range(1, self::DAY_HOURS);
+			$hours = range(1, static::HOURS);
 		}
 
 		if (!is_array($days) or empty($days))
@@ -202,7 +195,7 @@ class TargetingTime implements Targeting{
 	/**
 	 * Get params of this targeting
 	 *
-	 * @return mixed
+	 * @return array
 	 */
 	public function getParams()
 	{
@@ -216,7 +209,7 @@ class TargetingTime implements Targeting{
 			$params['impressionsPer' . $day] = isset($this->impressions[$day]) ? $this->impressions[$day] : 0;
 			$params['impressionsPerHour' . $day] = isset($this->impressionsPerHour[$day]) ? $this->impressionsPerHour[$day] : 0;
 
-			for ($hour = 1; $hour <= self::MONTH_DAYS; $hour++)
+			for ($hour = 1; $hour <= static::DAYS; $hour++)
 			{
 				if (isset($this->hours[$day][$hour]))
 				{

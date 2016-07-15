@@ -2,7 +2,7 @@
 
 namespace AdFox\Campaign\Traits\Restrictions;
 
-use AdFox\AdFox;
+use AdFox\Campaign\Banner\Banner;
 
 trait HasClicksAndImpressions {
 
@@ -234,20 +234,12 @@ trait HasClicksAndImpressions {
 	/**
 	 * Sets this trait attributes
 	 *
-	 * @param $instatce
-	 * @param $attributes
+	 * @param static $instance
+	 * @param array $attributes
 	 */
-	public static function setHasClicksAndImpressionsAttributes($instatce, $attributes)
+	public static function setHasClicksAndImpressionsAttributes($instance, $attributes)
 	{
-		$instatce->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
-		$instatce->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
-
-		$instatce->clicks = $attributes['clicks'];
-		$instatce->clicksToday = $attributes['clicksToday'];
-		$instatce->clicksHour = $attributes['clicksHour'];
-		
-		$instatce->impressions = $attributes['impressions'];
-		$instatce->impressionsToday = $attributes['impressionsToday'];
-		$instatce->impressionsHour = $attributes['impressionsHour'];
+		$instance->setClicksLimits($attributes['maxClicks'], $attributes['maxClicksPerDay'], $attributes['maxClicksPerHour']);
+		$instance->setImpressionsLimits($attributes['maxImpressions'], $attributes['maxImpressionsPerDay'], $attributes['maxImpressionsPerHour']);
 	}
 }

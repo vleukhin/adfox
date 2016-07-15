@@ -50,11 +50,11 @@ trait HasLevel {
 	/**
 	 * Sets this trait attributes
 	 *
-	 * @param $instatce
-	 * @param $attributes
+	 * @param static $instance
+	 * @param array $attributes
 	 */
-	public static function setHasLevelAttributes($instatce, $attributes)
+	public static function setHasLevelAttributes($instance, $attributes)
 	{
-		$instatce->setLevel($attributes['level']);
+		$instance->setLevel($attributes['level']);
 	}
 }

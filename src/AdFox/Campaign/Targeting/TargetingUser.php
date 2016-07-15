@@ -5,8 +5,7 @@ namespace AdFox\Campaign\Targeting;
 use AdFox\AdFox;
 use AdFox\Campaign\Targeting\Contracts\Targeting;
 
-class TargetingUser implements Targeting
-{
+class TargetingUser implements Targeting {
 	/**
 	 * User targeting criteria id
 	 *
@@ -33,17 +32,17 @@ class TargetingUser implements Targeting
 	 *
 	 * @var AdFox
 	 */
-	protected $adFox;
+	protected $adfox;
 
 	/**
 	 * TargetingUser constructor.
 	 *
-	 * @param AdFox $adFox
+	 * @param AdFox $adfox
 	 * @param $criteriaId
 	 */
-	public function __construct(AdFox $adFox, $criteriaId)
+	public function __construct(AdFox $adfox, $criteriaId)
 	{
-		$this->adFox = $adFox;
+		$this->adfox = $adfox;
 		$this->criteriaId = $criteriaId;
 	}
 
@@ -54,14 +53,7 @@ class TargetingUser implements Targeting
 	 */
 	public function enableAll()
 	{
-		$this->loadAllKeys();
-
-		foreach ($this->keys as $key => $enabled)
-		{
-			$this->keys[$key] = true;
-		}
-
-		return $this;
+		return $this->enableOrDisableAll(true);
 	}
 
 	/**
@@ -71,11 +63,21 @@ class TargetingUser implements Targeting
 	 */
 	public function disableAll()
 	{
+		return $this->enableOrDisableAll(false);
+	}
+
+	/**
+	 * Enable or disable all keys
+	 *
+	 * @return $this
+	 */
+	protected function enableOrDisableAll($enable)
+	{
 		$this->loadAllKeys();
 
 		foreach ($this->keys as $key => $enabled)
 		{
-			$this->keys[$key] = false;
+			$this->keys[$key] = $enable;
 		}
 
 		return $this;
@@ -84,45 +86,91 @@ class TargetingUser implements Targeting
 	/**
 	 * Enable key
 	 *
-	 * @param $key
+	 * @param int|string $key
 	 * @return $this
 	 */
 	public function enable($key)
 	{
-		$this->keys[$key] = true;
-
-		return $this;
+		return $this->enableOrDisableKey($key, true);
 	}
 
 	/**
 	 * Disable key
 	 *
-	 * @param $key
+	 * @param int|string $key
 	 * @return $this
 	 */
 	public function disable($key)
 	{
-		$this->keys[$key] = false;
+		return $this->enableOrDisableKey($key, false);
+	}
+
+	/**
+	 * Enable or disable key
+	 *
+	 * @param $key
+	 * @param bool $enable
+	 * @return $this
+	 */
+	protected function enableOrDisableKey($key, $enable)
+	{
+		$this->keys[$this->getIdByUserId($key)] = $enable;
 
 		return $this;
 	}
 
 	/**
 	 * Load all kets from API
-	 *
 	 */
 	protected function loadAllKeys()
 	{
 		if (!$this->allKeysLoaded)
 		{
-			$this->adFox->callApiCallbackLoop(function ($criteria) {
-					$this->keys[$criteria['ID']] = null;
+			$this->adfox->callApiCallbackLoop(function ($criteria) {
+					if (!isset($this->keys[$criteria['ID']]))
+					{
+						$this->keys[$criteria['ID']] = null;
+					}
 				},
 				AdFox::OBJECT_USERCRITERIA, 'listValues', null, ['criteriaID' => $this->criteriaId, 'limit' => 999]
 			);
 
+			/**
+			 * Undefined/Unknown criteria value
+			 */
+			if (!isset($this->keys[0]))
+			{
+				$this->keys[0] = null;
+			}
+
 			$this->allKeysLoaded = true;
 		}
+	}
+
+	/**
+	 * Gets id by user id
+	 * If not found undefined/unkown id (0) will be used
+	 *
+	 * @param int|string $id
+	 * @return int|null
+	 * @throws \AdFox\AdfoxException
+	 */
+	protected function getIdByUserId($id)
+	{
+		$response = $this->adfox->callApi(AdFox::OBJECT_USERCRITERIA, 'listValues', null, ['criteriaID' => $this->criteriaId, 'limit' => 999]);
+
+		if (!empty($response->data))
+		{
+			foreach ($response->data->children() as $criteria)
+			{
+				if ((string) $criteria->userID == $id)
+				{
+					return (int) $criteria->ID;
+				}
+			}
+		}
+
+		return 0;
 	}
 
 	/**
@@ -138,7 +186,7 @@ class TargetingUser implements Targeting
 	/**
 	 * Get params of this targeting
 	 *
-	 * @return mixed
+	 * @return array
 	 */
 	public function getParams()
 	{
