@@ -19,7 +19,7 @@ class AdFox {
 	 *
 	 * @var string
 	 */
-	protected $apiUrl = 'https://login.adfox.ru/API.php';
+	protected $apiUrl = 'https://api.adfox.ru/v1/API.php';
 
 	/**
 	 * Base AdFox GUI URL
