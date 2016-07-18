@@ -26,3 +26,7 @@ Added posibility to set file banners params
 Added franquency targeting
 Added debug mode (logs requests to stdout)
 Now campaign can be created using adverteser name instead of id
+
+## v.0.5.1
+Back to API v1
+Now AdFoxException has request info

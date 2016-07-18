@@ -19,7 +19,7 @@ class AdFox {
 	 *
 	 * @var string
 	 */
-	protected $apiUrl = 'https://login.adfox.ru/API.php';
+	protected $apiUrl = 'https://api.adfox.ru/v1/API.php';
 
 	/**
 	 * Base AdFox GUI URL
@@ -167,14 +167,14 @@ class AdFox {
 
 		if ($response == false)
 		{
-			throw new AdfoxException(curl_error($curl), static::CODE_API_CALL_ERROR);
+			throw new AdfoxException(curl_error($curl), static::CODE_API_CALL_ERROR, null, $request);
 		}
 
 		$response = new \SimpleXMLElement($response);
 
 		if (empty($response))
 		{
-			throw new AdfoxException('Empty AdFox response', static::CODE_API_CALL_ERROR);
+			throw new AdfoxException('Empty AdFox response', static::CODE_API_CALL_ERROR, null, $request);
 		}
 		elseif((string) $response->status->code != static::CODE_NO_ERROR)
 		{
@@ -185,7 +185,7 @@ class AdFox {
 				$message .= ': ' . (string) $response->status->parameter;
 			}
 
-			throw new AdfoxException($message, (int) $response->status->code);
+			throw new AdfoxException($message, (int) $response->status->code, null, $request);
 		}
 
 		return $response->result ? $response->result : $response->status;
