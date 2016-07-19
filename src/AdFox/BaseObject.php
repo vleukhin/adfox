@@ -11,7 +11,7 @@ abstract class BaseObject {
 	 *
 	 * @var int
 	 */
-	public $id = null;
+	public $id;
 
 	/**
 	 * Object name
@@ -44,12 +44,15 @@ abstract class BaseObject {
 	public function __construct(AdFox $adFox, $attributes = [], $relations = [])
 	{
 		$this->setAdfox($adFox);
-		$this->id = $attributes['ID'];
-		$this->name = $attributes['name'];
+		$this->id = isset($attributes['ID']) ? $attributes['ID'] : null;
+		$this->name = isset($attributes['name']) ? $attributes['name'] : null;
 
-		foreach (class_uses(static::class) as $trait)
+		if (!is_null($this->id))
 		{
-			call_user_func_array([$this, 'set' . (new \ReflectionClass($trait))->getShortName() . 'Attributes'], [$this, $attributes]);
+			foreach (class_uses(static::class) as $trait)
+			{
+				call_user_func_array([$this, 'set' . (new \ReflectionClass($trait))->getShortName() . 'Attributes'], [$this, $attributes]);
+			}
 		}
 
 		$this->loadRelations($relations);
@@ -76,7 +79,7 @@ abstract class BaseObject {
 		
 		foreach (class_uses(static::class) as $trait)
 		{
-			$attributes = array_merge($attributes, call_user_func([$trait, 'get' . basename($trait) . 'Attributes']));
+			$attributes = array_merge($attributes, call_user_func([$trait, 'get' . (new \ReflectionClass($trait))->getShortName() . 'Attributes']));
 		}
 		
 		$array = [];

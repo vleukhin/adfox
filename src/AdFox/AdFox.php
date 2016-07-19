@@ -408,7 +408,7 @@ class AdFox {
 	 * @param string|int $dateAddedFrom
 	 * @param string|int $dateAddedTo
 	 *
-	 * @return array
+	 * @return Campaign[]
 	 */
 	public function getCampaigns($name = null, $status = null, $dateAddedFrom = null, $dateAddedTo = null)
 	{

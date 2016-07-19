@@ -46,6 +46,13 @@ class Banner extends BaseObject{
 	protected $campaignID;
 
 	/**
+	 * Flight of this banner
+	 *
+	 * @var Flight
+	 */
+	public $flight;
+
+	/**
 	 * Banner constructor.
 	 *
 	 * @param AdFox $adfox
@@ -126,21 +133,9 @@ class Banner extends BaseObject{
 	 */
 	public function setFileParam($name, $filePath)
 	{
-		if ($this->campaignID)
+		if ($this->flight)
 		{
-			$params = ['objectID' => $this->campaignID];
-
-			if (filter_var($filePath, FILTER_VALIDATE_URL) !== false)
-			{
-				$params['URL'] = $filePath;
-			}
-			else
-			{
-				$params['file'] = new \CURLFile($filePath);
-			}
-
-			$result = $this->adfox->callApi(AdFox::OBJECT_FLIGHT, AdFox::ACTION_UPLOAD, null, $params);
-			$this->params[$name] = (string) $result->value;
+			$this->params[$name] = $this->flight->uploadFile($filePath);
 		}
 
 		return $this;
@@ -187,13 +182,26 @@ class Banner extends BaseObject{
 			'templateID' => $this->template->id,
 		];
 
-		$params = $params + $this->getParams() + $this->toArray();
+		$params = $params + $this->toArray();
 
 		$response = $this->adfox->callApi(AdFox::OBJECT_ACCOUNT, AdFox::ACTION_ADD, AdFox::OBJECT_BANNER, $params);
 		
 		$banner = $this->adfox->findBanner($response->ID);
+		$banner->flight = $flight;
 
 		return $banner;
+	}
+
+	/**
+	 * Loads this banner flight
+	 *
+	 * @return $this
+	 */
+	public function loadFlight()
+	{
+		$this->flight = $this->adfox->findFlight($this->campaignID);
+
+		return $this;
 	}
 
 	/**

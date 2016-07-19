@@ -205,6 +205,29 @@ class Flight extends BaseObject{
 	}
 
 	/**
+	 * Upload file to this flight
+	 *
+	 * @param string $filePath path on server or URL
+	 * @return string uploaded file url
+	 */
+	public function uploadFile($filePath)
+	{
+		$params = ['objectID' => $this->id];
+
+		if (filter_var($filePath, FILTER_VALIDATE_URL) !== false)
+		{
+			$params['URL'] = $filePath;
+		}
+		else
+		{
+			$params['file'] = new \CURLFile($filePath);
+		}
+
+		$result = $this->adfox->callApi(AdFox::OBJECT_FLIGHT, AdFox::ACTION_UPLOAD, null, $params);
+		return (string) $result->value;
+	}
+
+	/**
 	 * {@inheritdoc}
 	 */
 	protected function getType()
