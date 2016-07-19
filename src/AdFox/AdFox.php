@@ -401,6 +401,66 @@ class AdFox {
 	}
 
 	/**
+	 * Find campaigns by criterias
+	 *
+	 * @param string $name
+	 * @param int $status
+	 * @param string|int $dateAddedFrom
+	 * @param string|int $dateAddedTo
+	 *
+	 * @return array
+	 */
+	public function getCampaigns($name = null, $status = null, $dateAddedFrom = null, $dateAddedTo = null)
+	{
+		$campaigns = [];
+		$params = ['limit' => 999];
+
+		if (!empty($name))
+		{
+			$params['search'] = $name;
+		}
+
+		if (!is_null($dateAddedFrom))
+		{
+			$params['dateAddedFrom'] = static::convertDate($dateAddedFrom);
+		}
+
+		if (!is_null($dateAddedTo))
+		{
+			$params['dateAddedTo'] = static::convertDate($dateAddedTo);
+		}
+
+		if (!is_null($status))
+		{
+			if (!in_array($status, static::getConstants('OBJECT_STATUS')))
+			{
+				$status = static::OBJECT_STATUS_ACTIVE;
+			}
+		}
+
+		$result = $this->callApi(static::OBJECT_ACCOUNT, static::ACTION_LIST, static::OBJECT_CAMPAIGN, $params);
+
+		foreach ($result->data->children() as $campaign)
+		{
+			if (is_null($status) or (int) $campaign->status == $status)
+			{
+				/**
+				 * @TODO Remove lib side name filtering
+				 * Search param does not work in API now.
+				 * So we are filtering by ourself
+				 * Remove when it will come alive
+				 */
+				if (!isset($params['search']) or strpos((string) $campaign->name, $params['search']) !== false)
+				{
+					$campaigns[] = new Campaign($this, (array) $campaign);
+				}
+			}
+		}
+
+		return $campaigns;
+	}
+
+	/**
 	 * Gets array of defined constants
 	 *
 	 * @param string $prefix filter by prefix

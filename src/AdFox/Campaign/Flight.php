@@ -86,7 +86,7 @@ class Flight extends BaseObject{
 	 */
 	public function loadBanners()
 	{
-		$response = $this->adfox->callApi(AdFox::OBJECT_FLIGHT, AdFox::ACTION_LIST, AdFox::OBJECT_BANNER, ['objectID' => $this->id]);
+		$response = $this->adfox->callApi(AdFox::OBJECT_FLIGHT, AdFox::ACTION_LIST, AdFox::OBJECT_BANNER, ['objectID' => $this->id, 'limit' => 999]);
 		foreach ($response->data->children() as $banner)
 		{
 			$this->banners[] = Banner::createFromResponse($this->adfox, (array) $banner);
