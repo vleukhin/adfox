@@ -47,6 +47,13 @@ class Flight extends BaseObject{
 	public $campaign;
 
 	/**
+	 * Banners of this flight
+	 *
+	 * @var Banner[]
+	 */
+	public $banners;
+
+	/**
 	 * Flight constructor.
 	 *
 	 * @param AdFox $adfox
@@ -68,6 +75,22 @@ class Flight extends BaseObject{
 	public function loadCampaign()
 	{
 		$this->campaign = $this->adfox->findCampaign($this->superCampaignID);
+
+		return $this;
+	}
+
+	/**
+	 * Load this flight banners
+	 *
+	 * @return $this
+	 */
+	public function loadBanners()
+	{
+		$response = $this->adfox->callApi(AdFox::OBJECT_FLIGHT, AdFox::ACTION_LIST, AdFox::OBJECT_BANNER, ['objectID' => $this->id, 'limit' => 999]);
+		foreach ($response->data->children() as $banner)
+		{
+			$this->banners[] = Banner::createFromResponse($this->adfox, (array) $banner);
+		}
 
 		return $this;
 	}
