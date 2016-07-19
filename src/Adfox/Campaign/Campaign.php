@@ -45,7 +45,7 @@ class Campaign extends BaseObject{
 	 *
 	 * @throws \AdFox\AdfoxException
 	 */
-	protected function loadFlights()
+	public function loadFlights()
 	{
 		$response = $this->adfox->callApi(AdFox::OBJECT_ACCOUNT, AdFox::ACTION_LIST, AdFox::OBJECT_FLIGHT, ['superCampaignID' => $this->id]);
 		foreach ($response->data->children() as $flightData)

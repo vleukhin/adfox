@@ -124,9 +124,9 @@ class AdFox {
 	/**
 	 * Call Adfox API
 	 *
-	 * @param $object
-	 * @param $action
-	 * @param $actionObject
+	 * @param string $object
+	 * @param string $action
+	 * @param string $actionObject
 	 * @param array $parameters
 	 * @return \SimpleXMLElement[]
 	 * @throws AdfoxException
