@@ -27,6 +27,10 @@ Added franquency targeting
 Added debug mode (logs requests to stdout)
 Now campaign can be created using adverteser name instead of id
 
-## v.0.5.1
+#### v.0.5.1
 Back to API v1
 Now AdFoxException has request info
+
+####v.0.5.2
+Flight->banners relation 
+Campaign listing
